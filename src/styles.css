@@ -1,0 +1,341 @@
+/* Fonts first — @import rules must precede every other rule in the stylesheet. */
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap");
+
+@import "tailwindcss" source(none);
+@source "../src";
+
+/* ==========================================================================
+   Welfare Society of Fentons — design tokens
+
+   Two colours carry the whole design: a deep forest green for ground and
+   dark sections, and a warm gold for accents, buttons and highlighted words.
+   Shapes are soft and organic — pills, arches and torn edges rather than
+   straight rectangles.
+   ========================================================================== */
+
+@theme inline {
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 14px);
+  --radius-3xl: calc(var(--radius) + 26px);
+
+  /* Forest green — the primary. bg-brand-800 is the dark section ground. */
+  --color-brand-50: oklch(0.972 0.019 158);
+  --color-brand-100: oklch(0.941 0.044 160);
+  --color-brand-200: oklch(0.882 0.072 160);
+  --color-brand-300: oklch(0.798 0.1 159);
+  --color-brand-400: oklch(0.706 0.118 158);
+  --color-brand-500: oklch(0.606 0.116 158);
+  --color-brand-600: oklch(0.512 0.102 158);
+  --color-brand-700: oklch(0.428 0.086 159);
+  --color-brand-800: oklch(0.352 0.069 160);
+  --color-brand-900: oklch(0.292 0.056 161);
+  --color-brand-950: oklch(0.212 0.042 162);
+
+  /* Gold — accents, primary buttons, the highlighted half of a headline. */
+  --color-gold-50: oklch(0.986 0.021 101);
+  --color-gold-100: oklch(0.964 0.051 100);
+  --color-gold-200: oklch(0.934 0.088 99);
+  --color-gold-300: oklch(0.901 0.119 97);
+  --color-gold-400: oklch(0.869 0.141 95);
+  --color-gold-500: oklch(0.831 0.152 92);
+  --color-gold-600: oklch(0.746 0.141 88);
+  --color-gold-700: oklch(0.624 0.118 84);
+  --color-gold-800: oklch(0.508 0.095 82);
+  --color-gold-900: oklch(0.428 0.077 82);
+
+  /* Semantic roles */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-ink: var(--ink);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-success: oklch(0.62 0.14 150);
+  --color-info: oklch(0.62 0.12 240);
+
+  --shadow-soft: 0 1px 2px rgba(10, 40, 26, 0.04), 0 10px 30px -12px rgba(10, 40, 26, 0.12);
+  --shadow-card: 0 1px 3px rgba(10, 40, 26, 0.05), 0 18px 40px -20px rgba(10, 40, 26, 0.2);
+  --shadow-brand: 0 12px 34px -12px oklch(0.352 0.069 160 / 0.45);
+  --shadow-gold: 0 12px 30px -10px oklch(0.831 0.152 92 / 0.6);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(0.991 0.004 110);
+  --surface: oklch(0.972 0.012 120);
+  --foreground: oklch(0.27 0.018 160);
+  --ink: oklch(0.19 0.022 162);
+
+  --card: oklch(1 0 0);
+
+  --primary: oklch(0.428 0.086 159);
+  --primary-foreground: oklch(0.995 0.004 110);
+
+  --muted: oklch(0.956 0.01 130);
+  --muted-foreground: oklch(0.512 0.018 158);
+  --accent: oklch(0.934 0.088 99);
+
+  --border: oklch(0.902 0.013 140);
+  --ring: oklch(0.512 0.102 158);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    letter-spacing: -0.022em;
+    color: var(--color-ink);
+  }
+
+  /* Keyboard focus ring — visible, on-brand, never removed */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-gold-300);
+    color: var(--color-brand-950);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* ---------- Organic shapes ---------- */
+
+  /* Dome-topped image frame — the signature shape of this design. */
+  .shape-arch {
+    border-radius: 14rem 14rem 1.75rem 1.75rem;
+  }
+
+  /* Mirrored arch, for the second image in a pair. */
+  .shape-arch-b {
+    border-radius: 1.75rem 1.75rem 14rem 14rem;
+  }
+
+  /* Soft asymmetric blob used on feature images. */
+  .shape-blob {
+    border-radius: 48% 52% 42% 58% / 54% 44% 56% 46%;
+  }
+
+  /* ---------- Decorative backgrounds ---------- */
+
+  /* Green + gold glow behind the hero and page headers */
+  .bg-brand-glow {
+    background-image:
+      radial-gradient(900px 440px at 80% -14%, oklch(0.831 0.152 92 / 0.22), transparent 62%),
+      radial-gradient(760px 430px at -8% 14%, oklch(0.606 0.116 158 / 0.14), transparent 68%);
+  }
+
+  /* The deep green ground used for full-bleed dark sections */
+  .bg-forest {
+    background-color: var(--color-brand-800);
+    background-image:
+      radial-gradient(640px 320px at 88% 6%, oklch(0.606 0.116 158 / 0.4), transparent 60%),
+      radial-gradient(520px 300px at 4% 92%, oklch(0.212 0.042 162 / 0.5), transparent 62%);
+  }
+
+  /* Faint dotted grid */
+  .bg-dots {
+    background-image: radial-gradient(oklch(0.512 0.102 158 / 0.2) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  .bg-dots-gold {
+    background-image: radial-gradient(oklch(0.831 0.152 92 / 0.45) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  /* Diagonal brand stripes — used on small accent strips */
+  .bg-stripes {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      oklch(0.831 0.152 92 / 0.22) 0 6px,
+      transparent 6px 12px
+    );
+  }
+
+  .text-gradient-brand {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-gold-500),
+      var(--color-gold-300) 55%,
+      var(--color-gold-500)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Hand-drawn underline swash under a highlighted word */
+  .underline-swash {
+    background-image: linear-gradient(
+      to right,
+      oklch(0.831 0.152 92 / 0.55),
+      oklch(0.831 0.152 92 / 0.55)
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 0.32em;
+    background-position: 0 88%;
+  }
+
+  /* ---------- Motion ---------- */
+
+  /* Scroll reveal — elements start hidden, .is-visible is added by useReveal() */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 0.7, 0.2, 1),
+      transform 0.7s cubic-bezier(0.22, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hover-lift {
+    transition:
+      transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .marquee-track {
+    animation: marquee 42s linear infinite;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes float-soft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-9px);
+    }
+  }
+
+  .animate-float-soft {
+    animation: float-soft 6s ease-in-out infinite;
+  }
+
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 18s linear infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      box-shadow: 0 0 0 0 oklch(0.831 0.152 92 / 0.55);
+    }
+    70% {
+      box-shadow: 0 0 0 14px oklch(0.831 0.152 92 / 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 oklch(0.831 0.152 92 / 0);
+    }
+  }
+
+  .animate-pulse-ring {
+    animation: pulse-ring 2.4s ease-out infinite;
+  }
+
+  /* ---------- Carousel / scrollers ---------- */
+
+  .snap-row {
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .snap-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .snap-item {
+    scroll-snap-align: center;
+  }
+
+  /* Respect users who prefer less motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
