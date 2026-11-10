@@ -2,7 +2,7 @@ import { cn, initials } from "@/lib/utils";
 
 /**
  * Member avatar. Shows a photo when `src` is given, otherwise the person's
- * initials on a soft orange gradient — so board cards look complete before
+ * initials on a soft orange gradient - so board cards look complete before
  * real photographs are supplied.
  */
 export function Avatar({ name, src, size = "md", className }) {

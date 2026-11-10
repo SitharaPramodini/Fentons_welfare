@@ -11,7 +11,8 @@ import {
   Section,
   SectionHeading,
 } from "@/components/ui/primitives";
-import { amendment, membership, objectives, society } from "@/data/society";
+import { membership, objectives, society } from "@/data/society";
+import { useAuth } from "@/context/auth";
 import { committee, committeeFunctions, meetings } from "@/data/governance";
 import { deathDonations, welfareLoan } from "@/data/benefits";
 
@@ -27,7 +28,7 @@ import facePhoto3 from "@/assets/events/sports-day-team.jpg";
 
 /**
  * The home page states what the Society is, what it set out to do, what it
- * pays and who runs it — all of it from the Reformed Constitution.
+ * pays and who runs it - all of it from the Reformed Constitution.
  */
 export function Home() {
   return (
@@ -37,7 +38,7 @@ export function Home() {
       <Figures />
       <WhatItProvides />
       <Governance />
-      <ConstitutionCta />
+      <JoinCta />
     </>
   );
 }
@@ -132,9 +133,9 @@ const TABS = [
     points: membership.eligibility,
   },
   {
-    id: "amendment",
-    label: "Amendment",
-    points: amendment.slice(0, 3),
+    id: "rights",
+    label: "Your rights",
+    points: membership.rights,
   },
 ];
 
@@ -172,7 +173,12 @@ function AboutBlock() {
 
               {/* Inset second photo */}
               <div className="absolute -bottom-8 -right-4 w-36 overflow-hidden rounded-3xl border-4 border-background shadow-card sm:w-44">
-                <img src={insetPhoto} alt="" aria-hidden="true" className="aspect-4/3 w-full object-cover" />
+                <img
+                  src={insetPhoto}
+                  alt=""
+                  aria-hidden="true"
+                  className="aspect-4/3 w-full object-cover"
+                />
               </div>
             </div>
           </Reveal>
@@ -228,7 +234,7 @@ function AboutBlock() {
             <Reveal delay={120}>
               <div className="mt-9">
                 <Button to="/about" iconRight="ArrowRight">
-                  Read the Constitution
+                  About the Society
                 </Button>
               </div>
             </Reveal>
@@ -290,6 +296,9 @@ const PROVISIONS = [
     title: welfareLoan.name,
     text: "Up to Rs. 25,000/- at 5% fixed interest, repaid over ten months from the date of release.",
     to: "/benefits#loan",
+    /* Withheld from a visitor who is not signed in, along with everything
+     * else about the lending facility. */
+    members: true,
   },
   {
     no: "03",
@@ -301,6 +310,9 @@ const PROVISIONS = [
 ];
 
 function WhatItProvides() {
+  const { isSignedIn } = useAuth();
+  const provisions = PROVISIONS.filter((p) => !p.members || isSignedIn);
+
   return (
     <section className="bg-forest relative isolate overflow-hidden py-20 sm:py-24 lg:py-28">
       <BrushEdge position="top" />
@@ -309,7 +321,7 @@ function WhatItProvides() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
             invert
-            eyebrow="Clause 8"
+            eyebrow="Benefits and facilities"
             title="What the Society provides"
             className="max-w-xl"
           />
@@ -317,9 +329,15 @@ function WhatItProvides() {
           <Reveal delay={90}>
             <div className="max-w-sm">
               <p className="m-0 text-[15px] leading-relaxed text-white/60">
-                The approved benefit schedule, retained in full under the reformed Constitution.
+                The approved benefit schedule, retained in full.
               </p>
-              <Button to="/benefits" variant="onDark" size="sm" iconRight="ArrowRight" className="mt-5">
+              <Button
+                to="/benefits"
+                variant="onDark"
+                size="sm"
+                iconRight="ArrowRight"
+                className="mt-5"
+              >
                 All benefits
               </Button>
             </div>
@@ -327,7 +345,7 @@ function WhatItProvides() {
         </div>
 
         <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {PROVISIONS.map((p, i) => (
+          {provisions.map((p, i) => (
             <Reveal key={p.no} delay={i * 90}>
               <Link
                 to={p.to}
@@ -342,7 +360,7 @@ function WhatItProvides() {
                 <span className="absolute inset-0 bg-linear-to-t from-brand-950 via-brand-950/55 to-brand-950/5" />
 
                 <span className="absolute top-4 right-4 rounded-full bg-gold-400 px-3 py-1 font-display text-[11px] font-extrabold tracking-wider text-brand-950">
-                  No — {p.no}
+                  No - {p.no}
                 </span>
 
                 <span className="absolute inset-x-0 bottom-0 block p-6">
@@ -375,13 +393,13 @@ function Governance() {
           <div className="flex flex-col">
             <Reveal>
               <SectionHeading
-                eyebrow="Clauses 4 to 6"
+                eyebrow="Governance"
                 title="The Committee of Management"
                 lead={committee.remit}
               />
             </Reveal>
 
-            {/* Clause 6 — meeting facts, set as a divided strip rather than tiles */}
+            {/* Clause 6 - meeting facts, set as a divided strip rather than tiles */}
             <Reveal delay={110}>
               <dl className="mt-10 grid gap-7 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-border">
                 {meetings.facts.map((f) => (
@@ -409,12 +427,12 @@ function Governance() {
             </Reveal>
           </div>
 
-          {/* What the Committee does — a numbered rail, read top to bottom */}
+          {/* What the Committee does - a numbered rail, read top to bottom */}
           <Reveal delay={90}>
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-gold-400" aria-hidden="true" />
               <p className="m-0 text-[10.5px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
-                Clause 5 — what the Committee does
+                Clause 5 - what the Committee does
               </p>
             </div>
 
@@ -453,7 +471,7 @@ function Governance() {
 
 /* ----------------------------------------------------------------- CTA --- */
 
-function ConstitutionCta() {
+function JoinCta() {
   return (
     <Section className="pt-0">
       <Container>
@@ -467,26 +485,25 @@ function ConstitutionCta() {
 
             <div className="relative">
               <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-gold-400">
-                <Icon name="ScrollText" className="h-7 w-7 text-brand-950" />
+                <Icon name="HeartHandshake" className="h-7 w-7 text-brand-950" />
               </span>
 
               <h2 className="mt-6 text-balance font-display text-3xl font-extrabold text-white sm:text-4xl">
-                {society.constitution.title},{" "}
-                <span className="text-gold-300">Version {society.constitution.version}</span>
+                Join the <span className="text-gold-300">{society.shortName}</span>
               </h2>
 
               <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-white/65">
-                Everything on this site is taken from the Constitution of the {society.name} — the
-                objectives, the benefit amounts, the loan conditions and the rules the Committee of
-                Management works to.
+                Membership is open to every category of employee at {society.parentCompany}. It
+                takes a few minutes to apply, and it is what entitles you to the death donation
+                benefits and the welfare loan.
               </p>
 
               <div className="mt-9 flex flex-wrap justify-center gap-3">
-                <Button to="/about" size="lg" iconRight="ArrowRight">
-                  Read the Constitution
+                <Button to="/membership#apply" size="lg" iconRight="ArrowRight">
+                  Apply for membership
                 </Button>
-                <Button to="/photos" size="lg" variant="onDark">
-                  Welfare activities
+                <Button to="/benefits" size="lg" variant="onDark">
+                  What you get
                 </Button>
               </div>
             </div>

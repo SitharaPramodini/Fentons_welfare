@@ -1,103 +1,152 @@
 /* ===========================================================================
- * THE SOCIETY — identity, objectives, membership and contributions.
+ * THE SOCIETY - identity, objectives, membership and contributions.
  *
  * SOURCE OF TRUTH
  * ---------------
- * Every line in this file is taken from the Welfare Society of Fentons
- * Reformed Constitution (Version 1.0). Nothing here is illustrative or
- * invented. If a figure, name or date is not in the Constitution, it is not
- * on this site — add it here only when the Constitution is amended through
- * the approved Company process (clause 13).
+ * Every line here is taken from the Welfare Society of Fentons Reformed
+ * Constitution, Draft V1 of 21.10.2026. Nothing is illustrative or invented.
+ *
+ * The site deliberately carries only what a member needs: what the Society
+ * is for, who may join, what it costs, what it pays out and how to apply.
+ * The Constitution's internal governance detail - meeting procedure, minutes,
+ * office-bearer duties, conduct, vacancies, amendment procedure - is not
+ * reproduced here.
  * =========================================================================== */
 
 export const society = {
-  /* Clause 1 — Name */
+  /* Clause 1 - Name and registered office */
   name: "Welfare Society of Fentons",
   shortName: "Welfare Society",
-  parentCompany: "Fentons",
 
-  /* The governing document itself. Schedule II records version 1.0; the
-   * approval signatures and effective date are not yet filled in, so they
-   * are reported as pending rather than guessed at. */
-  constitution: {
-    title: "Reformed Constitution",
-    version: "1.0",
-    approvalPending: [
-      "Prepared by",
-      "Reviewed by",
-      "Approved by Senior Management",
-      "Effective Date",
-    ],
-  },
+  /* Clause 2.1 - "Company" means Hayleys Fentons Limited. */
+  parentCompany: "Hayleys Fentons Limited",
+  registeredOffice: "No. 200, Deans Road, Colombo 10",
 
-  /* Clause 2, first objective — used as the one-line summary of the Society. */
-  intro: "To promote the welfare and well-being of employees of Fentons.",
+  /* Clause 3.1 - used as the one-line summary of the Society. */
+  intro: "To promote the welfare and well-being of employees of Hayleys Fentons Limited.",
 
-  /* Clause 4, opening paragraph. */
+  /* Clause 6, opening paragraph. */
   governedBy:
     "The affairs and administration of the Welfare Society shall be managed by a Committee of Management appointed by the Senior Management of the Company.",
 };
 
-/* --- Clause 2 — Objectives ----------------------------------------------- */
+/* --- Clause 3 - Objectives -----------------------------------------------
+ * The five that describe what the Society does for a member. The first is the
+ * Society's whole purpose and leads the section; the rest support it. The remaining
+ * objectives (establishing the Fund, receiving donations, holding property,
+ * and doing all lawful acts conducive to the above) are powers rather than
+ * member-facing aims, and are not listed on the site.
+ * ----------------------------------------------------------------------- */
 
 export const objectives = [
   {
     icon: "HeartHandshake",
     title: "Welfare and well-being",
-    text: "To promote the welfare and well-being of employees of Fentons.",
-    accent: "brand",
+    text: "To promote the welfare and well-being of employees of Hayleys Fentons Limited.",
   },
   {
     icon: "HandCoins",
     title: "Financial and welfare assistance",
     text: "To provide financial and other welfare assistance to members in accordance with the approved benefits and facilities of the Society.",
-    accent: "amber",
   },
   {
     icon: "Ambulance",
-    title: "Assistance in difficult times",
-    text: "To provide assistance during specified family, personal, medical and emergency circumstances.",
-    accent: "rose",
+    title: "Assistance in hardship",
+    text: "To provide financial or other assistance, where practicable, in circumstances of sickness, accident, bereavement, marriage, childbirth, natural disaster, or other genuine hardship.",
   },
   {
     icon: "Users",
     title: "Participation and interaction",
     text: "To encourage employee participation, social interaction and welfare activities.",
-    accent: "sky",
   },
   {
     icon: "ShieldCheck",
     title: "Responsible administration",
     text: "To maintain and administer the Society’s funds in a responsible, transparent and controlled manner.",
-    accent: "emerald",
   },
 ];
 
-/* --- Clause 3 — Membership and eligibility ------------------------------- */
+/* --- Clause 4 - Membership and eligibility ------------------------------- */
 
 export const membership = {
+  /* Clause 4.1 - Eligibility */
+  openTo: [
+    "Permanent employees",
+    "Fixed-term employees",
+    "Contract employees",
+    "Probationary employees",
+    "Part-time employees",
+  ],
+
   eligibility: [
-    "Employees of Fentons who satisfy the applicable membership requirements shall be eligible to become members of the Society.",
-    "Membership shall commence in accordance with the approved membership procedure of the Society.",
-    "Employees shall complete the prescribed membership documentation where required.",
+    "Membership is open to all permanent, fixed-term, contract, probationary and part-time employees of the Company, subject to the applicable membership requirements.",
+    "Eligible employees shall complete the prescribed membership documentation where required.",
+    "The Committee may admit an eligible applicant as a Member in accordance with the approved membership procedure in force at the time, and shall not unreasonably refuse membership.",
   ],
 
-  conditions: [
-    "Employees who do not make the required contribution to the Welfare Fund shall not be entitled to the benefits and facilities of the Society for the relevant period, subject to any approved exception.",
-  ],
+  /* Clause 4.4 - Entrance fee and subscription */
+  fees: {
+    entrance: 250,
+    monthly: 200,
+    note: "These amounts may be varied by resolution passed at a General Meeting.",
+  },
 
+  /* Clause 4.5 - Cessation of membership */
   cessation: [
-    "An employee who leaves employment, retires, or otherwise ceases to be eligible for membership shall cease to be a member of the Society from the effective date of such cessation.",
-    "In the event of the death of a member, membership shall cease; however, the applicable death donation benefit may be paid in accordance with this Constitution.",
+    {
+      icon: "PenLine",
+      title: "Resignation",
+      text: "Membership ends when you resign from the Society in writing.",
+    },
+    {
+      icon: "LogOut",
+      title: "Leaving the Company",
+      text: "Membership ends on the date your employment with the Company ceases.",
+    },
+    {
+      icon: "Wallet",
+      title: "Unpaid subscriptions",
+      text: "Membership ends after three consecutive months of non-payment, and only once a written reminder has been sent.",
+    },
+    {
+      icon: "Scale",
+      title: "Expulsion",
+      text: "Only by a resolution of at least two-thirds of the Committee, after written notice of the alleged misconduct and a fair chance to be heard. You may appeal to the next General Meeting.",
+    },
+    {
+      icon: "Flower2",
+      title: "Death",
+      text: "Membership ceases, but the applicable death donation benefit may still be paid to the next of kin as per Company records.",
+    },
+  ],
+
+  /* Clause 4.6 - Former employees */
+  formerEmployees:
+    "The Committee may, at its discretion, permit a former employee who has ceased membership to participate in specified welfare benefits or activities on terms determined by the Committee.",
+
+  /* Clause 5.1 - Rights of members */
+  rights: [
+    "Attend and vote at General Meetings, and receive notice of them.",
+    "Elect and be elected to the Committee, subject to the eligibility requirements.",
+    "Participate in the activities and benefits of the Society.",
+    "Inspect the Society’s register of members, minutes and audited accounts during reasonable business hours.",
+  ],
+
+  /* Clause 5.2 - Obligations of members */
+  obligations: [
+    "Comply with the Constitution and the lawful decisions of the Society.",
+    "Pay subscriptions and other dues promptly.",
+    "Act in good faith and avoid conduct prejudicial to the Society or the Company.",
+    "Provide accurate information in applications and claims.",
   ],
 };
 
-/* --- Clause 7 — Contributions to the Welfare Fund ------------------------ */
+/* --- Clause 10 - Contributions to the Welfare Fund ------------------------ */
 
 export const contributions = [
   {
     icon: "Wallet",
-    text: "Members shall contribute to the Welfare Fund through the approved monthly subscription or contribution arrangement determined by the Company.",
+    text: "Members contribute to the Welfare Fund through the approved monthly subscription determined by the Company.",
   },
   {
     icon: "RefreshCw",
@@ -105,29 +154,10 @@ export const contributions = [
   },
   {
     icon: "CircleAlert",
-    text: "Contributions made to the Welfare Fund shall not be refundable upon cessation of employment, retirement, death, resignation from membership or under any other circumstance, unless otherwise specifically approved by the Company.",
+    text: "Contributions are not refundable on cessation of employment, retirement, death or resignation, unless specifically approved by the Company.",
   },
   {
     icon: "ShieldCheck",
     text: "All contributions shall be used solely for the approved purposes of the Society.",
   },
-];
-
-/* --- Clause 13 — Amendment of the Constitution --------------------------- */
-
-export const amendment = [
-  "No amendment, addition, deletion or alteration to this Constitution shall be made without the prior approval of Senior Management of the Company.",
-  "Any proposed amendment shall be submitted in writing to Senior Management for consideration and approval.",
-  "Approved amendments shall form part of this Constitution from the effective date determined by Senior Management.",
-  "The benefit amounts and welfare facilities may be reviewed from time to time; however, no existing benefit shall be reduced, withdrawn or replaced without the required Company approval.",
-];
-
-/* --- Clause 14 — General provisions -------------------------------------- */
-
-export const generalProvisions = [
-  "The Committee of Management shall operate within the authority granted by Senior Management and shall comply with all applicable Company policies and procedures.",
-  "The Committee shall not enter into any financial or other commitment on behalf of the Company without the required approval.",
-  "Any matter not specifically provided for in this Constitution shall be considered by the Committee of Management and, where necessary, referred to Senior Management for a final decision.",
-  "The decision of Senior Management shall be final in matters relating to the interpretation, administration, governance and operation of the Welfare Society.",
-  "Nothing in this Constitution shall be interpreted as creating an entitlement beyond the benefits and facilities approved by the Company.",
 ];

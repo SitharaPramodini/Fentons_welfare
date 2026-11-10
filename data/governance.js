@@ -1,5 +1,5 @@
 /* ===========================================================================
- * GOVERNANCE — the Committee of Management, its meetings, the duties of the
+ * GOVERNANCE - the Committee of Management, its meetings, the duties of the
  * office bearers, financial management, conduct and vacancies.
  *
  * Clauses 4, 5, 6, 9, 10, 11 and 12 of the Reformed Constitution (v1.0).
@@ -7,13 +7,13 @@
  * the Committee is appointed by Senior Management rather than elected.
  * =========================================================================== */
 
-/* --- Clause 4 — Committee of Management ---------------------------------- */
+/* --- Clause 4 - Committee of Management ---------------------------------- */
 
 export const committee = {
   remit:
     "The Committee of Management shall be responsible for administering the Society, implementing approved welfare activities, considering member requests, monitoring the Welfare Fund and ensuring that the Society operates in accordance with this Constitution and Company requirements.",
 
-  /* Clause 4.1 — Composition and appointment */
+  /* Clause 4.1 - Composition and appointment */
   composition: [
     "The Committee of Management shall be appointed by Senior Management of the Company.",
     "Senior Management shall determine the composition and number of members of the Committee of Management.",
@@ -24,7 +24,7 @@ export const committee = {
     "Any vacancy arising during the term of the Committee shall be filled by Senior Management.",
   ],
 
-  /* Clause 4.2 — Term of office */
+  /* Clause 4.2 - Term of office */
   term: [
     "The term of office of the Committee of Management shall be two (2) years from the date of its first meeting, unless otherwise determined by Senior Management.",
     "Committee members may be reappointed by Senior Management for a further term.",
@@ -32,7 +32,7 @@ export const committee = {
   ],
 };
 
-/* --- Clause 5 — Functions and responsibilities --------------------------- */
+/* --- Clause 5 - Functions and responsibilities --------------------------- */
 
 export const committeeFunctions = [
   {
@@ -64,7 +64,7 @@ export const committeeFunctions = [
   },
 ];
 
-/* --- Clause 6 — Meetings of the Committee of Management ------------------ */
+/* --- Clause 6 - Meetings of the Committee of Management ------------------ */
 
 export const meetings = {
   /* The three facts members most often need, pulled out of the clause. */
@@ -86,7 +86,7 @@ export const meetings = {
     "Any matter requiring the approval of Senior Management shall be referred to Senior Management before implementation.",
   ],
 
-  /* Clause 6.1 — Minutes of meetings */
+  /* Clause 6.1 - Minutes of meetings */
   minutes: [
     "The General Secretary / Secretary shall be responsible for recording and maintaining the minutes of every Committee of Management meeting.",
     "Minutes shall record the date, time and venue of the meeting, members present, apologies, matters discussed, decisions taken, action points and any other relevant matters.",
@@ -97,7 +97,7 @@ export const meetings = {
   ],
 };
 
-/* --- Clause 10 — Duties of office bearers -------------------------------- */
+/* --- Clause 10 - Duties of office bearers -------------------------------- */
 
 export const officeBearers = [
   {
@@ -136,7 +136,7 @@ export const officeBearers = [
   },
 ];
 
-/* --- Clause 9 — Financial management and accounts ------------------------ */
+/* --- Clause 9 - Financial management and accounts ------------------------ */
 
 export const financialManagement = {
   /* The financial year is the one hard date the Constitution fixes. */
@@ -152,7 +152,7 @@ export const financialManagement = {
   ],
 };
 
-/* --- Clause 11 — Conduct and discipline ---------------------------------- */
+/* --- Clause 11 - Conduct and discipline ---------------------------------- */
 
 export const conduct = [
   "All Committee members shall act honestly, responsibly and in the best interests of the Society and the Company.",
@@ -162,7 +162,7 @@ export const conduct = [
   "Senior Management may take appropriate Company disciplinary action where the conduct also constitutes a breach of Company rules or policies.",
 ];
 
-/* --- Clause 12 — Vacancies and replacement ------------------------------- */
+/* --- Clause 12 - Vacancies and replacement ------------------------------- */
 
 export const vacancies = [
   "If a vacancy occurs in the Committee of Management due to resignation, cessation of employment, removal, incapacity or any other reason, Senior Management may appoint a replacement.",

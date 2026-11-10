@@ -12,7 +12,7 @@ import {
 import { contributions, membership, society } from "@/data/society";
 
 /**
- * Clause 3 — Membership and eligibility, with the contribution rules from
+ * Clause 3 - Membership and eligibility, with the contribution rules from
  * clause 7 that determine whether a member is entitled to benefits.
  *
  * There is no sign-up form here on purpose: the Constitution says membership

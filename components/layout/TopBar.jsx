@@ -6,8 +6,8 @@ import { society } from "@/data/society";
 /**
  * Thin dark strip above the header.
  *
- * It carries the one standing fact every member may need — when the Committee
- * of Management sits — and the version of the document this site reports.
+ * It carries the one standing fact every member may need - when the Committee
+ * of Management sits - and the version of the document this site reports.
  * Nothing here is promotional, because nothing promotional is on record.
  */
 export function TopBar() {

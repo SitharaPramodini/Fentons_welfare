@@ -1,50 +1,88 @@
 /* ===========================================================================
- * BENEFITS AND FACILITIES — clause 8 and Schedule I of the Reformed
- * Constitution (v1.0).
+ * BENEFITS AND FACILITIES - clause 11 of the Reformed Constitution
+ * (Draft V1, 21.10.2026), which Schedule I repeats.
  *
- * Clause 8 opens: "The Society shall continue the existing approved Fentons
+ * The clause opens: "The Society shall continue the existing approved Fentons
  * welfare benefits … and shall remain applicable unless revised through the
- * approved Company process." Every figure below is quoted from that clause
- * and from Schedule I. Do not add a benefit here that has not been approved.
+ * approved Company process." Every figure below is quoted from it. None of
+ * these amounts changed in the 21.10.2026 draft.
+ *
+ * Do not add a benefit here that has not been approved.
  * =========================================================================== */
 
 export const benefitsIntro =
   "The Society shall continue the existing approved Fentons welfare benefits. The following benefit schedule reflects the existing benefit structure provided in the current Fentons welfare documents and shall remain applicable unless revised through the approved Company process.";
 
-/* --- Clause 8.1 — Death donation benefits -------------------------------- */
+/* --- Clause 11.1 - Death donation benefits -------------------------------- */
 
 export const deathDonations = {
+  /* Listed largest first. There is no per-row colour: the amount is the
+   * variable, and one hue plus bar width says that more clearly than five
+   * competing hues would. */
   rows: [
-    { category: "Member", amount: 50000, icon: "IdCard", accent: "brand" },
-    { category: "Member’s spouse", amount: 30000, icon: "Heart", accent: "rose" },
+    /* `featured` is editorial, not rank: a member reads this page to find
+     * their own cover first, so that card carries the gold. */
+    { category: "Member", amount: 50000, icon: "IdCard", featured: true },
+    { category: "Member’s spouse", amount: 30000, icon: "Heart" },
     {
       category: "Eligible child",
       note: "Below 21 years / applicable existing condition",
       amount: 25000,
       icon: "Baby",
-      accent: "sky",
     },
-    { category: "Member’s parent", amount: 25000, icon: "Users", accent: "amber" },
-    { category: "Member’s spouse’s parent", amount: 25000, icon: "Users", accent: "violet" },
+    { category: "Member’s parent", amount: 25000, icon: "Users" },
+    { category: "Member’s spouse’s parent", amount: 25000, icon: "Users" },
   ],
 
   condition:
     "Death donation benefits shall be subject to the existing eligibility requirements, supporting documents and verification procedures of the Society.",
 };
 
-/* --- Clause 8.2 — Welfare / emergency / distress loan -------------------- */
+/* --- Clause 11.2 - Welfare / emergency / distress loan -------------------- */
 
 export const welfareLoan = {
   name: "Welfare / Emergency / Distress Loan",
 
-  /* The headline terms, for the summary table. */
+  /* The one figure a member comes to this page for. */
+  headline: {
+    label: "Maximum loan amount",
+    value: "Rs. 25,000/-",
+    note: "At 5% fixed interest, repaid over ten months from the date of release.",
+  },
+
+  /* The supporting terms. Value and detail are kept apart so each reads as a
+   * short figure with its condition beneath, rather than one long sentence. */
   terms: [
-    { label: "Maximum loan amount", value: "Rs. 25,000/-", icon: "HandCoins", strong: true },
-    { label: "Interest", value: "5% fixed — Rs. 1,250/- on a Rs. 25,000/- loan", icon: "Percent" },
-    { label: "Repayment period", value: "10 months from the date of release", icon: "Hourglass" },
-    { label: "Loan Fund contribution", value: "Rs. 1,500/- (mandatory)", icon: "Wallet" },
-    { label: "Service required", value: "More than 2 years of employment", icon: "CalendarClock" },
-    { label: "Release", value: "Within two (02) weeks of approval", icon: "Clock" },
+    {
+      label: "Interest",
+      value: "5% fixed",
+      note: "Rs. 1,250/- on a Rs. 25,000/- loan",
+      icon: "Percent",
+    },
+    {
+      label: "Repayment",
+      value: "10 months",
+      note: "From the date of release",
+      icon: "Hourglass",
+    },
+    {
+      label: "Loan Fund contribution",
+      value: "Rs. 1,500/-",
+      note: "Mandatory for consideration",
+      icon: "Wallet",
+    },
+    {
+      label: "Service required",
+      value: "Over 2 years",
+      note: "Of employment with the Company",
+      icon: "CalendarClock",
+    },
+    {
+      label: "Release",
+      value: "Within 2 weeks",
+      note: "Of approval",
+      icon: "Clock",
+    },
   ],
 
   eligibility: [
@@ -56,7 +94,7 @@ export const welfareLoan = {
     "Loan release shall be subject to the applicable divisional allocation, membership distribution and availability of funds.",
   ],
 
-  /* How a member actually gets one — clause 8.2, in order. */
+  /* How a member actually gets one, in order. */
   process: [
     {
       title: "Submit the application",
@@ -83,55 +121,10 @@ export const welfareLoan = {
   ],
 };
 
-/* --- Clause 8.3 — Other existing welfare activities and facilities ------- */
+/* --- Clause 11.3 - Other existing welfare activities and facilities ------- */
 
 export const otherActivities = {
   text: "Existing welfare activities and facilities operated by Fentons shall continue subject to their existing approved terms, availability of funds and Company approval.",
   change:
     "Any new benefit or facility, or any change to an existing benefit, shall be implemented only after obtaining the required Company approval.",
 };
-
-/* --- Schedule I — Existing approved welfare benefits ---------------------
- * Reproduced in full: the benefits to be retained under the reformed
- * Constitution, with the condition recorded against each.
- * ----------------------------------------------------------------------- */
-
-export const scheduleI = [
-  {
-    benefit: "Death – Member",
-    current: "Rs. 50,000/-",
-    remarks: "Subject to existing eligibility and verification",
-  },
-  {
-    benefit: "Death – Spouse",
-    current: "Rs. 30,000/-",
-    remarks: "Subject to existing eligibility and verification",
-  },
-  {
-    benefit: "Death – Eligible Child",
-    current: "Rs. 25,000/-",
-    remarks: "Existing age/eligibility condition applies",
-  },
-  {
-    benefit: "Death – Parent",
-    current: "Rs. 25,000/-",
-    remarks: "Subject to existing eligibility and verification",
-  },
-  {
-    benefit: "Death – Spouse’s Parent",
-    current: "Rs. 25,000/-",
-    remarks: "Subject to existing eligibility and verification",
-  },
-  {
-    benefit: "Welfare / Emergency Loan",
-    current: "Up to Rs. 25,000/-",
-    remarks: "Existing loan policy applies",
-  },
-  { benefit: "Loan Interest", current: "5% fixed", remarks: "Rs. 1,250/- on Rs. 25,000/-" },
-  { benefit: "Loan Repayment", current: "10 months", remarks: "From date of release" },
-  {
-    benefit: "Loan Fund Contribution",
-    current: "Rs. 1,500/-",
-    remarks: "Mandatory for loan consideration",
-  },
-];

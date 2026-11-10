@@ -5,7 +5,7 @@ import logoFile from "@/assets/logo.png";
 /**
  * Society logo.
  *
- * The artwork is the corporate Hayleys Fentons lockup — a wide mark that
+ * The artwork is the corporate Hayleys Fentons lockup - a wide mark that
  * already carries the "Fentons" wordmark, so this component does NOT repeat it
  * in text. Instead the lockup is followed by a rule and "Welfare Society", the
  * usual way a staff body signs itself under the company brand.

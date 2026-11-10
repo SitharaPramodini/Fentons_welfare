@@ -1,15 +1,15 @@
-/* Fonts first — @import rules must precede every other rule in the stylesheet. */
+/* Fonts first - @import rules must precede every other rule in the stylesheet. */
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap");
 
 @import "tailwindcss" source(none);
 @source "../src";
 
 /* ==========================================================================
-   Welfare Society of Fentons — design tokens
+   Welfare Society of Fentons - design tokens
 
    Two colours carry the whole design: a deep forest green for ground and
    dark sections, and a warm gold for accents, buttons and highlighted words.
-   Shapes are soft and organic — pills, arches and torn edges rather than
+   Shapes are soft and organic - pills, arches and torn edges rather than
    straight rectangles.
    ========================================================================== */
 
@@ -24,7 +24,7 @@
   --radius-2xl: calc(var(--radius) + 14px);
   --radius-3xl: calc(var(--radius) + 26px);
 
-  /* Forest green — the primary. bg-brand-800 is the dark section ground. */
+  /* Forest green - the primary. bg-brand-800 is the dark section ground. */
   --color-brand-50: oklch(0.972 0.019 158);
   --color-brand-100: oklch(0.941 0.044 160);
   --color-brand-200: oklch(0.882 0.072 160);
@@ -37,7 +37,7 @@
   --color-brand-900: oklch(0.292 0.056 161);
   --color-brand-950: oklch(0.212 0.042 162);
 
-  /* Gold — accents, primary buttons, the highlighted half of a headline. */
+  /* Gold - accents, primary buttons, the highlighted half of a headline. */
   --color-gold-50: oklch(0.986 0.021 101);
   --color-gold-100: oklch(0.964 0.051 100);
   --color-gold-200: oklch(0.934 0.088 99);
@@ -120,7 +120,7 @@
     color: var(--color-ink);
   }
 
-  /* Keyboard focus ring — visible, on-brand, never removed */
+  /* Keyboard focus ring - visible, on-brand, never removed */
   :focus-visible {
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
@@ -144,7 +144,7 @@
 
   /* ---------- Organic shapes ---------- */
 
-  /* Dome-topped image frame — the signature shape of this design. */
+  /* Dome-topped image frame - the signature shape of this design. */
   .shape-arch {
     border-radius: 14rem 14rem 1.75rem 1.75rem;
   }
@@ -187,7 +187,7 @@
     background-size: 18px 18px;
   }
 
-  /* Diagonal brand stripes — used on small accent strips */
+  /* Diagonal brand stripes - used on small accent strips */
   .bg-stripes {
     background-image: repeating-linear-gradient(
       -45deg,
@@ -222,7 +222,7 @@
 
   /* ---------- Motion ---------- */
 
-  /* Scroll reveal — elements start hidden, .is-visible is added by useReveal() */
+  /* Scroll reveal - elements start hidden, .is-visible is added by useReveal() */
   .reveal {
     opacity: 0;
     transform: translateY(22px);

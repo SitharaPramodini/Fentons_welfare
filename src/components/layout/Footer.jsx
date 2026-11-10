@@ -1,15 +1,18 @@
 import { Link } from "@/router";
 import { Logo } from "@/components/layout/Logo";
-import { navItems } from "@/components/layout/Header";
+import { visibleNavItems } from "@/components/layout/Header";
+import { useAuth } from "@/context/auth";
 import { society } from "@/data/society";
 
 /**
- * Identity, the same nav links, and the document the Society is governed by.
+ * Identity, the same nav links, and where to find the Society.
  *
- * No contact block: the Constitution records no address, telephone number or
- * e-mail for the Society, and nothing is invented to fill the space.
+ * The address is the registered office from clause 1.1.2. No telephone number
+ * or e-mail appears: the Constitution records none, and nothing is invented
+ * to fill the space.
  */
 export function Footer() {
+  const { isSignedIn } = useAuth();
   const year = new Date().getFullYear();
 
   return (
@@ -23,7 +26,7 @@ export function Footer() {
 
           <nav aria-label="Footer">
             <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-3 p-0">
-              {navItems.map((item) => (
+              {visibleNavItems(isSignedIn).map((item) => (
                 <li key={item.to}>
                   <Link
                     to={item.to}
@@ -38,13 +41,11 @@ export function Footer() {
 
           <div className="max-w-xs space-y-2 text-sm text-white/55">
             <p className="m-0 font-display text-[13px] font-semibold tracking-[0.12em] text-brand-300 uppercase">
-              Governing document
+              Registered office
             </p>
-            <p className="m-0">
-              {society.constitution.title}, Version {society.constitution.version}
-            </p>
+            <p className="m-0">{society.registeredOffice}</p>
             <p className="m-0 text-[13px] text-white/40">
-              Administered by the Committee of Management appointed by Senior Management.
+              For the employees of {society.parentCompany}.
             </p>
           </div>
         </div>

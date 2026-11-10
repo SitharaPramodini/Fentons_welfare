@@ -10,7 +10,7 @@ import { Logo } from "@/components/layout/Logo";
  * Four links plus the Constitution. That is the whole navigation.
  *
  * The site covers exactly what the Reformed Constitution covers, so there is
- * no Contact, News, Clubs or Celebrations page — the Constitution records no
+ * no Contact, News, Clubs or Celebrations page - the Constitution records no
  * such details and none are invented.
  */
 export const navItems = [
@@ -60,11 +60,11 @@ export function Header() {
         )}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 sm:px-6 lg:px-8">
-          <Link to="/" aria-label="Welfare Society of Fentons — home">
+          <Link to="/" aria-label="Welfare Society of Fentons - home">
             <Logo />
           </Link>
 
-          {/* Desktop nav — five links fit comfortably from md up */}
+          {/* Desktop nav - five links fit comfortably from md up */}
           <nav aria-label="Main" className="hidden md:block">
             <ul className="m-0 flex list-none items-center gap-1 rounded-full border border-border bg-surface/80 p-1.5 backdrop-blur-sm">
               {navItems.map((item) => {

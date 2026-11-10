@@ -12,7 +12,7 @@ import { NotFound } from "@/pages/NotFound";
 import { society } from "@/data/society";
 
 /**
- * Route table — one page per part of the Reformed Constitution.
+ * Route table - one page per part of the Reformed Constitution.
  *
  * Adding a page means adding a line here and one in `navItems`
  * (src/components/layout/Header.jsx).

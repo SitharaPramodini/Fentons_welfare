@@ -8,6 +8,7 @@ import { PageHero } from "@/components/layout/PageHero";
 import { Container, EmptyState, Section } from "@/components/ui/primitives";
 import { gallery, galleryCategories } from "@/data/gallery";
 import { otherActivities } from "@/data/benefits";
+import heroImage from "@/assets/events/netball-championship.jpg";
 
 const spans = {
   wide: "col-span-2 row-span-1",
@@ -16,7 +17,7 @@ const spans = {
 };
 
 /**
- * Photographs from the Society's welfare activities — clause 8.3.
+ * Photographs from the Society's welfare activities - clause 8.3.
  *
  * The Constitution does not set an events calendar, so there is none here:
  * this page shows what has actually taken place, nothing scheduled.
@@ -44,7 +45,8 @@ export function Photos() {
     <>
       <PageHero
         breadcrumb="Photos"
-        eyebrow="Clause 8.3"
+        image={heroImage}
+        eyebrow="Photo gallery"
         eyebrowIcon="Camera"
         title="Welfare activities"
         lead={otherActivities.text}

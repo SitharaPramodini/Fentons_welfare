@@ -49,17 +49,17 @@ export const gallery = [
   {
     id: "g1",
     src: iftarGroupPhoto,
-    title: "Iftar at head office — everyone together",
+    title: "Iftar at head office - everyone together",
     category: "Community",
     year: "2026",
     icon: "Users",
     tone: "amber",
-    span: "wide", // wide | tall | normal — controls the masonry footprint
+    span: "wide", // wide | tall | normal - controls the masonry footprint
   },
   {
     id: "g2",
     src: womensDayPerformance,
-    title: "Women's Day — the live band gets everyone up",
+    title: "Women's Day - the live band gets everyone up",
     category: "Celebrations",
     year: "2026",
     icon: "Music",
@@ -69,7 +69,7 @@ export const gallery = [
   {
     id: "g3",
     src: cricketWinnersCheque,
-    title: "Six-a-side cricket — the squad with the winners' cheque",
+    title: "Six-a-side cricket - the squad with the winners' cheque",
     category: "Sports",
     year: "2026",
     icon: "Trophy",
@@ -169,7 +169,7 @@ export const gallery = [
   {
     id: "g13",
     src: netballChampionship,
-    title: "Spirit of Victory — the netball championship squad",
+    title: "Spirit of Victory - the netball championship squad",
     category: "Sports",
     year: "2026",
     icon: "Medal",

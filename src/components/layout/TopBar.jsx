@@ -1,14 +1,12 @@
 import { Link } from "@/router";
 import { Icon } from "@/components/ui/Icon";
 import { meetings } from "@/data/governance";
-import { society } from "@/data/society";
 
 /**
  * Thin dark strip above the header.
  *
- * It carries the one standing fact every member may need — when the Committee
- * of Management sits — and the version of the document this site reports.
- * Nothing here is promotional, because nothing promotional is on record.
+ * It carries the one standing fact every member may need - when the Committee
+ * of Management sits - and the one action most visitors are here for.
  */
 export function TopBar() {
   const when = meetings.facts.find((f) => f.label === "When")?.value;
@@ -27,11 +25,11 @@ export function TopBar() {
         </p>
 
         <Link
-          to="/about#document-control"
+          to="/membership#apply"
           className="inline-flex items-center gap-2 rounded-full bg-gold-400 px-3.5 py-1.5 font-display text-[12px] font-bold tracking-wide text-brand-950 transition hover:bg-gold-300"
         >
-          <Icon name="ScrollText" className="h-3.5 w-3.5" />
-          {society.constitution.title} v{society.constitution.version}
+          <Icon name="UserPlus" className="h-3.5 w-3.5" />
+          Apply to join
         </Link>
       </div>
     </div>

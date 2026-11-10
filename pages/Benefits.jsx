@@ -21,7 +21,7 @@ import {
 import { contributions } from "@/data/society";
 
 /**
- * Clause 8 and Schedule I — the benefit amounts, the loan conditions, and the
+ * Clause 8 and Schedule I - the benefit amounts, the loan conditions, and the
  * contribution rules that sit behind them.
  */
 export function Benefits() {

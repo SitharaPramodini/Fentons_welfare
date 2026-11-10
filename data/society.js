@@ -1,17 +1,17 @@
 /* ===========================================================================
- * THE SOCIETY — identity, objectives, membership and contributions.
+ * THE SOCIETY - identity, objectives, membership and contributions.
  *
  * SOURCE OF TRUTH
  * ---------------
  * Every line in this file is taken from the Welfare Society of Fentons
  * Reformed Constitution (Version 1.0). Nothing here is illustrative or
  * invented. If a figure, name or date is not in the Constitution, it is not
- * on this site — add it here only when the Constitution is amended through
+ * on this site - add it here only when the Constitution is amended through
  * the approved Company process (clause 13).
  * =========================================================================== */
 
 export const society = {
-  /* Clause 1 — Name */
+  /* Clause 1 - Name */
   name: "Welfare Society of Fentons",
   shortName: "Welfare Society",
   parentCompany: "Fentons",
@@ -30,7 +30,7 @@ export const society = {
     ],
   },
 
-  /* Clause 2, first objective — used as the one-line summary of the Society. */
+  /* Clause 2, first objective - used as the one-line summary of the Society. */
   intro: "To promote the welfare and well-being of employees of Fentons.",
 
   /* Clause 4, opening paragraph. */
@@ -38,7 +38,7 @@ export const society = {
     "The affairs and administration of the Welfare Society shall be managed by a Committee of Management appointed by the Senior Management of the Company.",
 };
 
-/* --- Clause 2 — Objectives ----------------------------------------------- */
+/* --- Clause 2 - Objectives ----------------------------------------------- */
 
 export const objectives = [
   {
@@ -73,7 +73,7 @@ export const objectives = [
   },
 ];
 
-/* --- Clause 3 — Membership and eligibility ------------------------------- */
+/* --- Clause 3 - Membership and eligibility ------------------------------- */
 
 export const membership = {
   eligibility: [
@@ -92,7 +92,7 @@ export const membership = {
   ],
 };
 
-/* --- Clause 7 — Contributions to the Welfare Fund ------------------------ */
+/* --- Clause 7 - Contributions to the Welfare Fund ------------------------ */
 
 export const contributions = [
   {
@@ -113,7 +113,7 @@ export const contributions = [
   },
 ];
 
-/* --- Clause 13 — Amendment of the Constitution --------------------------- */
+/* --- Clause 13 - Amendment of the Constitution --------------------------- */
 
 export const amendment = [
   "No amendment, addition, deletion or alteration to this Constitution shall be made without the prior approval of Senior Management of the Company.",
@@ -122,7 +122,7 @@ export const amendment = [
   "The benefit amounts and welfare facilities may be reviewed from time to time; however, no existing benefit shall be reduced, withdrawn or replaced without the required Company approval.",
 ];
 
-/* --- Clause 14 — General provisions -------------------------------------- */
+/* --- Clause 14 - General provisions -------------------------------------- */
 
 export const generalProvisions = [
   "The Committee of Management shall operate within the authority granted by Senior Management and shall comply with all applicable Company policies and procedures.",

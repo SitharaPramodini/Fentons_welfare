@@ -27,7 +27,7 @@ import facePhoto3 from "@/assets/events/sports-day-team.jpg";
 
 /**
  * The home page states what the Society is, what it set out to do, what it
- * pays and who runs it — all of it from the Reformed Constitution.
+ * pays and who runs it - all of it from the Reformed Constitution.
  */
 export function Home() {
   return (
@@ -342,7 +342,7 @@ function WhatItProvides() {
                 <span className="absolute inset-0 bg-linear-to-t from-brand-950 via-brand-950/55 to-brand-950/5" />
 
                 <span className="absolute top-4 right-4 rounded-full bg-gold-400 px-3 py-1 font-display text-[11px] font-extrabold tracking-wider text-brand-950">
-                  No — {p.no}
+                  No - {p.no}
                 </span>
 
                 <span className="absolute inset-x-0 bottom-0 block p-6">
@@ -381,7 +381,7 @@ function Governance() {
               />
             </Reveal>
 
-            {/* Clause 6 — meeting facts, set as a divided strip rather than tiles */}
+            {/* Clause 6 - meeting facts, set as a divided strip rather than tiles */}
             <Reveal delay={110}>
               <dl className="mt-10 grid gap-7 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-border">
                 {meetings.facts.map((f) => (
@@ -409,12 +409,12 @@ function Governance() {
             </Reveal>
           </div>
 
-          {/* What the Committee does — a numbered rail, read top to bottom */}
+          {/* What the Committee does - a numbered rail, read top to bottom */}
           <Reveal delay={90}>
             <div className="flex items-center gap-3">
               <span className="h-px w-8 bg-gold-400" aria-hidden="true" />
               <p className="m-0 text-[10.5px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
-                Clause 5 — what the Committee does
+                Clause 5 - what the Committee does
               </p>
             </div>
 
@@ -476,7 +476,7 @@ function ConstitutionCta() {
               </h2>
 
               <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-white/65">
-                Everything on this site is taken from the Constitution of the {society.name} — the
+                Everything on this site is taken from the Constitution of the {society.name} - the
                 objectives, the benefit amounts, the loan conditions and the rules the Committee of
                 Management works to.
               </p>

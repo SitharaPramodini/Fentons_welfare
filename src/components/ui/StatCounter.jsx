@@ -39,7 +39,7 @@ function useCountUp(target, duration = 1600) {
 
         const tick = (now) => {
           const p = Math.min(1, (now - start) / duration);
-          // easeOutCubic — fast at first, settles gently on the final number
+          // easeOutCubic - fast at first, settles gently on the final number
           const eased = 1 - Math.pow(1 - p, 3);
           setValue(Math.round(target * eased));
           if (p < 1) frame = requestAnimationFrame(tick);

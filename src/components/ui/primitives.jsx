@@ -238,7 +238,7 @@ const buttonVariants = {
     "border border-white/25 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 hover:-translate-y-0.5",
 };
 
-/* The trailing arrow sits in its own circle — the signature button detail. */
+/* The trailing arrow sits in its own circle - the signature button detail. */
 const badgeTones = {
   primary: "bg-brand-900 text-gold-300",
   secondary: "bg-gold-400 text-brand-950",
@@ -370,7 +370,7 @@ export function Card({ className, children, hover = true, ...rest }) {
   );
 }
 
-/** Rounded square tile holding an icon — used at the top of most cards. */
+/** Rounded square tile holding an icon - used at the top of most cards. */
 export function IconTile({ name, tone = "brand", className, size = "md" }) {
   const a = accent(tone);
   const dims = size === "lg" ? "h-14 w-14" : size === "sm" ? "h-9 w-9" : "h-11 w-11";

@@ -6,7 +6,7 @@ import { Icon } from "@/components/ui/Icon";
  * Accessible single-open accordion. Used for FAQs and the longer reference
  * lists (loan notes, insurance conditions).
  *
- * items: [{ q, a }] — `a` may be a string or an array of paragraphs.
+ * items: [{ q, a }] - `a` may be a string or an array of paragraphs.
  */
 export function Accordion({ items, className, defaultOpen = -1 }) {
   const [open, setOpen] = useState(defaultOpen);

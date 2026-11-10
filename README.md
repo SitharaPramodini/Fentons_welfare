@@ -1,4 +1,4 @@
-# Fentons Welfare Society — website
+# Fentons Welfare Society - website
 
 A light, orange-themed site for the employee welfare society of Fentons Limited.
 
@@ -34,18 +34,18 @@ Lines that need replacing are marked `PLACEHOLDER` in the data files.
 **The two forms do not submit anywhere.** Registration and Contact validate properly, then hand
 the completed details to the member's email client as a prefilled message to the welfare office.
 That works today with no server. To accept submissions properly, POST the `values` object to an
-API or Google Form endpoint — see the comment above `SubmittedPanel` in `src/pages/Register.jsx`.
+API or Google Form endpoint - see the comment above `SubmittedPanel` in `src/pages/Register.jsx`.
 
 ---
 
 ## Editing content
 
-**All text lives in `src/data/` — you should rarely need to open a component.**
+**All text lives in `src/data/` - you should rarely need to open a component.**
 
 | File | Controls |
 | --- | --- |
 | `society.js` | Name, founding date, mission, objectives, goals, society structure, membership, benefits, stats, milestones, contact details |
-| `events.js` | Every event. Upcoming vs. past is worked out from the date — just add an event with the right date |
+| `events.js` | Every event. Upcoming vs. past is worked out from the date - just add an event with the right date |
 | `celebrations.js` | Weddings, new arrivals, birthdays, retirements |
 | `members.js` | Chairman's message, board of directors, sub-committee chairs, trustees |
 | `clubs.js` | Sports clubs, youth forum, club membership, fund-raising |
@@ -109,12 +109,12 @@ plus Gallery, Register and a 404 page.
 ## How it is built
 
 - **Vite + React 19**, plain JavaScript (no TypeScript)
-- **Tailwind CSS v4** — the orange palette and all design tokens are at the top of
+- **Tailwind CSS v4** - the orange palette and all design tokens are at the top of
   `src/styles.css` as `--color-brand-50` … `--color-brand-950`. Change the brand colour there and
   the whole site follows.
 - **Custom hash router** (`src/router.jsx`, ~120 lines) instead of React Router. URLs look like
-  `/#/events`, which means the built site works on any static host — IIS, Apache, GitHub Pages, a
-  network share — with no server rewrite rules to configure.
+  `/#/events`, which means the built site works on any static host - IIS, Apache, GitHub Pages, a
+  network share - with no server rewrite rules to configure.
 - **No UI framework.** Shared pieces live in `src/components/ui/`; the 5 original dependencies are
   React, React DOM, lucide-react (icons), clsx and tailwind-merge.
 

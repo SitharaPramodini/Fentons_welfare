@@ -1,5 +1,5 @@
 /* ===========================================================================
- * BENEFITS AND FACILITIES — clause 8 and Schedule I of the Reformed
+ * BENEFITS AND FACILITIES - clause 8 and Schedule I of the Reformed
  * Constitution (v1.0).
  *
  * Clause 8 opens: "The Society shall continue the existing approved Fentons
@@ -11,7 +11,7 @@
 export const benefitsIntro =
   "The Society shall continue the existing approved Fentons welfare benefits. The following benefit schedule reflects the existing benefit structure provided in the current Fentons welfare documents and shall remain applicable unless revised through the approved Company process.";
 
-/* --- Clause 8.1 — Death donation benefits -------------------------------- */
+/* --- Clause 8.1 - Death donation benefits -------------------------------- */
 
 export const deathDonations = {
   rows: [
@@ -32,7 +32,7 @@ export const deathDonations = {
     "Death donation benefits shall be subject to the existing eligibility requirements, supporting documents and verification procedures of the Society.",
 };
 
-/* --- Clause 8.2 — Welfare / emergency / distress loan -------------------- */
+/* --- Clause 8.2 - Welfare / emergency / distress loan -------------------- */
 
 export const welfareLoan = {
   name: "Welfare / Emergency / Distress Loan",
@@ -40,7 +40,7 @@ export const welfareLoan = {
   /* The headline terms, for the summary table. */
   terms: [
     { label: "Maximum loan amount", value: "Rs. 25,000/-", icon: "HandCoins", strong: true },
-    { label: "Interest", value: "5% fixed — Rs. 1,250/- on a Rs. 25,000/- loan", icon: "Percent" },
+    { label: "Interest", value: "5% fixed - Rs. 1,250/- on a Rs. 25,000/- loan", icon: "Percent" },
     { label: "Repayment period", value: "10 months from the date of release", icon: "Hourglass" },
     { label: "Loan Fund contribution", value: "Rs. 1,500/- (mandatory)", icon: "Wallet" },
     { label: "Service required", value: "More than 2 years of employment", icon: "CalendarClock" },
@@ -56,7 +56,7 @@ export const welfareLoan = {
     "Loan release shall be subject to the applicable divisional allocation, membership distribution and availability of funds.",
   ],
 
-  /* How a member actually gets one — clause 8.2, in order. */
+  /* How a member actually gets one - clause 8.2, in order. */
   process: [
     {
       title: "Submit the application",
@@ -83,7 +83,7 @@ export const welfareLoan = {
   ],
 };
 
-/* --- Clause 8.3 — Other existing welfare activities and facilities ------- */
+/* --- Clause 8.3 - Other existing welfare activities and facilities ------- */
 
 export const otherActivities = {
   text: "Existing welfare activities and facilities operated by Fentons shall continue subject to their existing approved terms, availability of funds and Company approval.",
@@ -91,7 +91,7 @@ export const otherActivities = {
     "Any new benefit or facility, or any change to an existing benefit, shall be implemented only after obtaining the required Company approval.",
 };
 
-/* --- Schedule I — Existing approved welfare benefits ---------------------
+/* --- Schedule I - Existing approved welfare benefits ---------------------
  * Reproduced in full: the benefits to be retained under the reformed
  * Constitution, with the condition recorded against each.
  * ----------------------------------------------------------------------- */

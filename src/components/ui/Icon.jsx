@@ -2,7 +2,7 @@
  * Icon registry.
  *
  * Data files refer to icons by name (e.g. icon: "HandCoins"). Importing each
- * one explicitly here — rather than `import * as lucide` — keeps the bundle to
+ * one explicitly here - rather than `import * as lucide` - keeps the bundle to
  * only the icons actually used.
  *
  * Adding a new icon: import it below, add it to `registry`, then use its name
@@ -40,6 +40,8 @@ import {
   Droplet,
   Expand,
   ExternalLink,
+  Eye,
+  EyeOff,
   Facebook,
   FileText,
   Flower2,
@@ -135,6 +137,8 @@ const registry = {
   Droplet,
   Expand,
   ExternalLink,
+  Eye,
+  EyeOff,
   Facebook,
   FileText,
   Flower2,

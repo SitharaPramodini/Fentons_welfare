@@ -3,49 +3,43 @@ import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
 import { Steps } from "@/components/ui/Steps";
 import { PageHero } from "@/components/layout/PageHero";
-import {
-  Card,
-  Container,
-  IconTile,
-  Section,
-  SectionHeading,
-  accent,
-} from "@/components/ui/primitives";
-import {
-  benefitsIntro,
-  deathDonations,
-  otherActivities,
-  scheduleI,
-  welfareLoan,
-} from "@/data/benefits";
-import { contributions } from "@/data/society";
+import { SignInGate } from "@/components/layout/SignInGate";
+import { useAuth } from "@/context/auth";
+import { Card, Container, IconTile, Section, SectionHeading } from "@/components/ui/primitives";
+import { benefitsIntro, deathDonations, otherActivities, welfareLoan } from "@/data/benefits";
+import heroImage from "@/assets/events/womens-day-gift.jpg";
 
 /**
- * Clause 8 and Schedule I — the benefit amounts, the loan conditions, and the
- * contribution rules that sit behind them.
+ * What the Society pays out: the death donation amounts and the welfare loan.
+ *
+ * Schedule I of the Constitution repeats these same figures, so it is not
+ * reproduced again here. What members pay in is on the Membership page.
  */
 export function Benefits() {
+  const { isSignedIn } = useAuth();
+
   return (
     <>
       <PageHero
         breadcrumb="Benefits"
-        eyebrow="Clause 8"
+        image={heroImage}
+        eyebrow="What membership gives you"
         eyebrowIcon="HandCoins"
         title="Benefits and facilities"
         lead={benefitsIntro}
         jumpLinks={[
           { to: "/benefits#death-donation", label: "Death donation", icon: "HeartHandshake" },
-          { to: "/benefits#loan", label: "Welfare loan", icon: "HandCoins" },
-          { to: "/benefits#contributions", label: "Contributions", icon: "Wallet" },
-          { to: "/benefits#schedule", label: "Schedule I", icon: "FileText" },
+          /* The loan is not advertised to a visitor who is not signed in. */
+          ...(isSignedIn
+            ? [{ to: "/benefits#loan", label: "Welfare loan", icon: "HandCoins" }]
+            : []),
+          { to: "/benefits#other", label: "Other activities", icon: "PartyPopper" },
         ]}
       />
 
       <DeathDonations />
       <WelfareLoan />
       <OtherActivities />
-      <Contributions />
-      <ScheduleOne />
     </>
   );
 }
@@ -57,48 +51,12 @@ function DeathDonations() {
     <Section id="death-donation">
       <Container>
         <SectionHeading
-          eyebrow="Clause 8.1"
+          eyebrow="In bereavement"
           eyebrowIcon="HeartHandshake"
           title="Death donation benefits"
         />
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {deathDonations.rows.map((row, i) => {
-            const a = accent(row.accent);
-            return (
-              <Reveal key={row.category} delay={i * 60}>
-                <div
-                  className={cn(
-                    "hover-lift flex h-full flex-col overflow-hidden rounded-2xl border bg-card shadow-soft",
-                    a.border,
-                  )}
-                >
-                  <div className={cn("h-1 w-full bg-gradient-to-r", a.grad)} />
-
-                  <div className="flex flex-1 flex-col p-6">
-                    <IconTile name={row.icon} tone={row.accent} />
-
-                    <h3 className="mt-4 font-display text-base leading-snug font-semibold">
-                      {row.category}
-                    </h3>
-                    {row.note ? (
-                      <p className="mt-1 text-[12.5px] text-muted-foreground">{row.note}</p>
-                    ) : null}
-
-                    <p
-                      className={cn(
-                        "mt-auto pt-5 font-display text-3xl font-extrabold tracking-tight",
-                        a.text,
-                      )}
-                    >
-                      Rs. {row.amount.toLocaleString("en-US")}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
+        <BenefitSchedule rows={deathDonations.rows} />
 
         <Reveal delay={200}>
           <div className="mt-8 flex items-start gap-3 rounded-2xl border border-border bg-surface p-5">
@@ -113,40 +71,160 @@ function DeathDonations() {
   );
 }
 
+/**
+ * The benefit schedule as a row of cards: category at the top, the amount
+ * carrying the bottom of the card.
+ *
+ * Exactly one card is gold — the member's own cover, which is what most
+ * people come to this page to find. That is emphasis, and it only works
+ * because the others stay quiet: five coloured cards would say nothing at
+ * all. Every figure stays in ink and is tabular so the columns line up.
+ */
+function BenefitSchedule({ rows }) {
+  return (
+    <div className="relative mt-12">
+      {/* Soft gold wash behind the row, echoing the featured card. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-1/3 -z-10 h-40 bg-gradient-to-r from-transparent via-gold-200/45 to-transparent blur-3xl"
+      />
+
+      <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        {rows.map((row, i) => (
+          <Reveal as="li" key={row.category} delay={i * 70}>
+            <div
+              className={cn(
+                "hover-lift flex h-full min-h-54 flex-col rounded-2xl border p-5 shadow-soft",
+                row.featured
+                  ? "border-gold-400 bg-gold-400"
+                  : "border-border bg-card hover:border-brand-300",
+              )}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <h3
+                  className={cn(
+                    "m-0 font-display text-[12px] leading-relaxed font-bold tracking-[0.12em] uppercase",
+                    row.featured ? "text-brand-950" : "text-ink",
+                  )}
+                >
+                  {row.category}
+                </h3>
+                <Icon
+                  name={row.icon}
+                  aria-hidden="true"
+                  className={cn(
+                    "h-5 w-5 shrink-0",
+                    row.featured ? "text-brand-950/70" : "text-brand-500",
+                  )}
+                />
+              </div>
+
+              {row.note ? (
+                <p
+                  className={cn(
+                    "mt-2 text-[12px] leading-snug",
+                    row.featured ? "text-brand-950/70" : "text-muted-foreground",
+                  )}
+                >
+                  {row.note}
+                </p>
+              ) : null}
+
+              <p
+                className={cn(
+                  "mt-auto pt-8 font-display text-[1.65rem] leading-none font-extrabold tracking-tight tabular-nums",
+                  row.featured ? "text-brand-950" : "text-ink",
+                )}
+              >
+                Rs. {row.amount.toLocaleString("en-US")}
+              </p>
+            </div>
+          </Reveal>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 /* ---------------------------------------------------------- Welfare loan --- */
 
 function WelfareLoan() {
+  const { isSignedIn } = useAuth();
+
+  /* Nothing about the loan reaches a visitor who is not signed in - not the
+   * amount, the terms, or that it exists beyond the invitation to sign in. */
+  if (!isSignedIn) {
+    return (
+      <Section muted id="loan">
+        <Container className="max-w-2xl">
+          <SignInGate
+            title="Members only"
+            text="The Society's lending facility is for members. Sign in with your HRIS number to see the terms and apply."
+          />
+        </Container>
+      </Section>
+    );
+  }
+
   return (
     <Section muted id="loan">
       <Container>
-        <SectionHeading eyebrow="Clause 8.2" eyebrowIcon="HandCoins" title={welfareLoan.name} />
+        <SectionHeading
+          eyebrow="Borrowing from the Society"
+          eyebrowIcon="HandCoins"
+          title={welfareLoan.name}
+        />
 
-        {/* Headline terms */}
-        <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
-          <div className="h-1.5 w-full bg-gradient-to-r from-brand-400 to-brand-600" />
-          <dl className="m-0 divide-y divide-border">
-            {welfareLoan.terms.map((t) => (
+        {/* The amount leads; the conditions support it. A row of six equal
+         * lines made the one figure people come for no louder than the rest. */}
+        <div className="mt-10 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+          <Reveal>
+            <div className="relative isolate flex h-full flex-col justify-center overflow-hidden rounded-2xl bg-brand-900 p-7 sm:p-9">
+              <div className="bg-dots-gold absolute inset-0 opacity-25" aria-hidden="true" />
               <div
-                key={t.label}
-                className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 px-5 py-4 sm:px-7"
-              >
-                <dt className="flex items-center gap-2.5 text-sm font-medium text-muted-foreground">
-                  <Icon name={t.icon} className="h-4 w-4 shrink-0 text-brand-500" />
-                  {t.label}
-                </dt>
-                <dd
-                  className={cn(
-                    "m-0 font-display text-ink",
-                    t.strong
-                      ? "text-xl font-extrabold text-brand-700"
-                      : "text-[15px] font-semibold",
-                  )}
-                >
-                  {t.value}
-                </dd>
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-16 -right-16 h-56 w-56 rounded-full border border-gold-400/20"
+              />
+
+              <div className="relative">
+                <p className="m-0 font-display text-[12px] font-bold tracking-[0.14em] text-gold-300 uppercase">
+                  {welfareLoan.headline.label}
+                </p>
+                <p className="mt-3 m-0 font-display text-4xl leading-none font-extrabold tracking-tight text-white tabular-nums sm:text-5xl">
+                  {welfareLoan.headline.value}
+                </p>
+                <p className="mt-4 m-0 max-w-xs text-[14px] leading-relaxed text-white/65">
+                  {welfareLoan.headline.note}
+                </p>
               </div>
+            </div>
+          </Reveal>
+
+          <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-2">
+            {welfareLoan.terms.map((t, i) => (
+              <Reveal
+                as="li"
+                key={t.label}
+                delay={i * 60}
+                className={i === welfareLoan.terms.length - 1 ? "sm:col-span-2" : undefined}
+              >
+                <div className="flex h-full items-start gap-3.5 rounded-2xl border border-border bg-card p-5 shadow-soft">
+                  <Icon name={t.icon} className="mt-0.5 h-5 w-5 shrink-0 text-brand-500" />
+                  <div className="min-w-0">
+                    <p className="m-0 font-display text-[11.5px] font-bold tracking-[0.1em] text-muted-foreground uppercase">
+                      {t.label}
+                    </p>
+                    <p className="mt-1.5 m-0 font-display text-lg leading-none font-bold text-ink">
+                      {t.value}
+                    </p>
+                    <p className="mt-1.5 m-0 text-[12.5px] leading-snug text-muted-foreground">
+                      {t.note}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
             ))}
-          </dl>
+          </ul>
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
@@ -217,7 +295,7 @@ function OtherActivities() {
     <Section id="other">
       <Container>
         <SectionHeading
-          eyebrow="Clause 8.3"
+          eyebrow="Beyond the benefits"
           eyebrowIcon="PartyPopper"
           title="Other existing welfare activities and facilities"
         />
@@ -241,86 +319,6 @@ function OtherActivities() {
             </Card>
           </Reveal>
         </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* --------------------------------------------------------- Contributions --- */
-
-function Contributions() {
-  return (
-    <Section muted id="contributions">
-      <Container>
-        <SectionHeading
-          eyebrow="Clause 7"
-          eyebrowIcon="Wallet"
-          title="Contributions to the Welfare Fund"
-          lead="The benefits above are paid out of the Welfare Fund, which members build through the approved contribution arrangement."
-        />
-
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {contributions.map((c, i) => (
-            <Reveal key={c.text} delay={i * 60}>
-              <div className="flex h-full items-start gap-3 rounded-2xl border border-border bg-card p-5 shadow-soft">
-                <IconTile name={c.icon} size="sm" />
-                <p className="m-0 text-sm leading-relaxed text-foreground/80">{c.text}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* ------------------------------------------------------------ Schedule I --- */
-
-function ScheduleOne() {
-  return (
-    <Section id="schedule">
-      <Container>
-        <SectionHeading
-          eyebrow="Schedule I"
-          eyebrowIcon="FileText"
-          title="Existing approved welfare benefits"
-          lead="The benefits to be retained under the reformed Constitution."
-        />
-
-        <Reveal className="mt-10">
-          <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-soft">
-            <table className="w-full min-w-[42rem] border-collapse text-left">
-              <thead>
-                <tr className="border-b border-border bg-surface">
-                  <th className="px-5 py-4 font-display text-[12px] font-bold tracking-[0.08em] text-muted-foreground uppercase sm:px-6">
-                    Benefit
-                  </th>
-                  <th className="px-5 py-4 font-display text-[12px] font-bold tracking-[0.08em] text-muted-foreground uppercase sm:px-6">
-                    Current benefit
-                  </th>
-                  <th className="px-5 py-4 font-display text-[12px] font-bold tracking-[0.08em] text-muted-foreground uppercase sm:px-6">
-                    Condition / remarks
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {scheduleI.map((row) => (
-                  <tr key={row.benefit} className="transition-colors hover:bg-brand-50/40">
-                    <td className="px-5 py-4 text-sm font-medium text-ink sm:px-6">
-                      {row.benefit}
-                    </td>
-                    <td className="px-5 py-4 font-display text-sm font-bold text-brand-700 sm:px-6">
-                      {row.current}
-                    </td>
-                    <td className="px-5 py-4 text-sm text-muted-foreground sm:px-6">
-                      {row.remarks}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Reveal>
       </Container>
     </Section>
   );

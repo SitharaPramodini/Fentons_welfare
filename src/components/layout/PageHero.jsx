@@ -6,10 +6,43 @@ import { BrushEdge, Eyebrow } from "@/components/ui/primitives";
 /**
  * Banner at the top of every inner page: breadcrumb, eyebrow, title, lead and
  * optional quick-jump links to sections further down the page.
+ *
+ * `image` sets a photograph inside the green band. It is purely decorative, so
+ * it carries no alt text and is masked back into the brand green: solid on the
+ * left where the words sit, clearing towards the right edge. Below `lg` the
+ * text spans the full width, so the photograph drops to a faint texture rather
+ * than competing with it.
  */
-export function PageHero({ eyebrow, eyebrowIcon, title, lead, breadcrumb, jumpLinks, children }) {
+export function PageHero({
+  eyebrow,
+  eyebrowIcon,
+  title,
+  lead,
+  breadcrumb,
+  jumpLinks,
+  image,
+  children,
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-brand-900">
+      {image ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-full lg:w-[56%]"
+        >
+          <img
+            src={image}
+            alt=""
+            loading="eager"
+            className="h-full w-full object-cover opacity-30 sm:opacity-40 lg:opacity-100"
+          />
+          {/* Fade the photograph into the green, left to right. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-900 via-brand-900/85 to-brand-900/35 lg:via-brand-900/70 lg:to-brand-900/20" />
+          {/* Settle it onto the torn bottom edge. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-900 via-transparent to-brand-900/40" />
+        </div>
+      ) : null}
+
       {/* decorative rings + dotted field */}
       <div className="bg-dots-gold absolute inset-0 opacity-25" aria-hidden="true" />
       <div

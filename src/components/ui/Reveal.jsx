@@ -1,14 +1,27 @@
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { observeReveal } from "@/lib/reveal";
 
 /**
- * Wraps children in a scroll-reveal container. The `.reveal` class starts the
- * element hidden; useReveal() adds `.is-visible` when it scrolls into view.
+ * Fades its children in when they scroll into view.
  *
- * `delay` staggers items in a grid — pass the array index multiplied by ~60ms.
+ * The element registers itself on mount, so content that appears after the
+ * page has loaded — search results, a profile fetched from the API — reveals
+ * just like content that was there from the start.
+ *
+ * `delay` staggers items in a grid: pass the array index multiplied by ~60ms.
+ *
+ * `as` must be a plain DOM tag ("div", "li", …) rather than a component, so
+ * the ref reaches a real element.
  */
 export function Reveal({ children, delay = 0, className, as: Cmp = "div", ...rest }) {
+  const node = useRef(null);
+
+  useEffect(() => observeReveal(node.current), []);
+
   return (
     <Cmp
+      ref={node}
       className={cn("reveal", className)}
       style={delay ? { "--reveal-delay": `${delay}ms` } : undefined}
       {...rest}

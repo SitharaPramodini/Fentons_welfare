@@ -23,7 +23,7 @@ import {
 
 /**
  * The Constitution, laid out clause by clause. This page is the reference
- * document — nothing is summarised away and nothing is added to it.
+ * document - nothing is summarised away and nothing is added to it.
  */
 export function About() {
   return (
@@ -387,7 +387,7 @@ function DocumentControl() {
             <div className="flex flex-wrap items-center gap-3">
               <IconTile name="FileText" tone="slate" />
               <div>
-                <h2 className="m-0 font-display text-lg font-semibold">Schedule II — Approval</h2>
+                <h2 className="m-0 font-display text-lg font-semibold">Schedule II - Approval</h2>
                 <p className="m-0 mt-1 text-sm text-muted-foreground">
                   {society.constitution.title}, Version {society.constitution.version}
                 </p>

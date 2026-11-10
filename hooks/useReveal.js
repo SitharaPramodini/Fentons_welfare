@@ -9,7 +9,7 @@ export function useReveal(key) {
     const nodes = Array.from(document.querySelectorAll(".reveal:not(.is-visible)"));
     if (nodes.length === 0) return;
 
-    // No IntersectionObserver (or reduced motion) — just show everything.
+    // No IntersectionObserver (or reduced motion) - just show everything.
     if (
       typeof IntersectionObserver === "undefined" ||
       window.matchMedia("(prefers-reduced-motion: reduce)").matches

@@ -1,420 +1,258 @@
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
+import { Avatar } from "@/components/ui/Avatar";
 import { PageHero } from "@/components/layout/PageHero";
-import {
-  Card,
-  Container,
-  IconTile,
-  Section,
-  SectionHeading,
-  accent,
-} from "@/components/ui/primitives";
-import { amendment, generalProvisions, objectives, society } from "@/data/society";
-import {
-  committee,
-  committeeFunctions,
-  conduct,
-  financialManagement,
-  meetings,
-  officeBearers,
-  vacancies,
-} from "@/data/governance";
+import { Card, Container, IconTile, Section, SectionHeading } from "@/components/ui/primitives";
+import { objectives, society } from "@/data/society";
+import { committee, committeeFunctions, meetings, officeBearers } from "@/data/governance";
+import { corporateManagement } from "@/data/management";
+import heroImage from "@/assets/events/iftar-group-photo.jpg";
 
 /**
- * The Constitution, laid out clause by clause. This page is the reference
- * document — nothing is summarised away and nothing is added to it.
+ * What the Society is for and who runs it.
+ *
+ * Deliberately short. The Constitution's internal procedure - meeting
+ * conduct, minutes, financial controls, discipline, vacancies, amendment -
+ * is not reproduced here; members who need it should ask the Secretary for
+ * the document itself.
  */
 export function About() {
   return (
     <>
       <PageHero
         breadcrumb="The Society"
-        eyebrow={`${society.constitution.title} · Version ${society.constitution.version}`}
+        image={heroImage}
+        eyebrow="About us"
         eyebrowIcon="ScrollText"
         title={society.name}
-        lead={society.governedBy}
+        lead={society.intro}
         jumpLinks={[
-          { to: "/about#objectives", label: "Objectives", icon: "Target" },
-          { to: "/about#committee", label: "Committee", icon: "Landmark" },
-          { to: "/about#meetings", label: "Meetings", icon: "CalendarCheck" },
-          { to: "/about#office-bearers", label: "Office bearers", icon: "Users" },
-          { to: "/about#finance", label: "Finance", icon: "Wallet" },
+          { to: "/about#objectives", label: "What we do", icon: "Target" },
+          { to: "/about#committee", label: "Who runs it", icon: "Landmark" },
+          { to: "/about#management", label: "Corporate management", icon: "Users" },
         ]}
       />
 
       <Objectives />
       <Committee />
-      <Functions />
-      <Meetings />
-      <OfficeBearers />
-      <Finance />
-      <ConductAndVacancies />
-      <AmendmentAndGeneral />
-      <DocumentControl />
+      <CorporateManagement />
     </>
   );
 }
 
-/* ----------------------------------------------------------- shared bits --- */
-
-/** A clause rendered as a list of provisions, each with a tick. */
-function ClauseList({ items, className, tone = "brand" }) {
-  const a = accent(tone);
-  return (
-    <ul className={cn("m-0 grid list-none gap-3 p-0", className)}>
-      {items.map((text, i) => (
-        <Reveal as="li" key={i} delay={i * 40} className="flex items-start gap-3">
-          <Icon name="CircleCheck" className={cn("mt-0.5 h-4.5 w-4.5 shrink-0", a.text)} />
-          <span className="text-[15px] leading-relaxed text-foreground/80">{text}</span>
-        </Reveal>
-      ))}
-    </ul>
-  );
-}
-
-/* ----------------------------------------------------------- Objectives --- */
+/* ------------------------------------------------------------ Objectives --- */
 
 function Objectives() {
   return (
     <Section id="objectives">
       <Container>
-        <SectionHeading eyebrow="Clause 2" eyebrowIcon="Target" title="Objectives" />
+        <SectionHeading
+          eyebrow="What the Society is for"
+          eyebrowIcon="Target"
+          title="Objectives"
+          lead={`The Society exists for the employees of ${society.parentCompany}.`}
+        />
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {objectives.map((o, i) => (
-            <Reveal key={o.title} delay={i * 60}>
-              <Card className="h-full">
-                <IconTile name={o.icon} tone={o.accent} />
-                <h3 className="mt-4 font-display text-base font-semibold">{o.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{o.text}</p>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
+        {/* The first objective is the Society's whole purpose, so it leads at
+         * double width on the dark ground; the other four support it. That
+         * also fills the grid, which five equal cards never do. A colour per
+         * card encoded nothing, so they now share one. */}
+        <ul className="m-0 mt-10 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3">
+          {objectives.map((objective, i) => {
+            const lead = i === 0;
+            return (
+              <Reveal
+                as="li"
+                key={objective.title}
+                delay={i * 70}
+                className={lead ? "lg:col-span-2" : undefined}
+              >
+                <div
+                  className={cn(
+                    "hover-lift relative isolate flex h-full flex-col overflow-hidden rounded-2xl p-6 shadow-soft sm:p-7",
+                    lead ? "bg-brand-900" : "border border-border bg-card",
+                  )}
+                >
+                  {lead ? (
+                    <div className="bg-dots-gold absolute inset-0 opacity-25" aria-hidden="true" />
+                  ) : null}
+
+                  <div className="relative flex h-full flex-col">
+                    <span
+                      className={cn(
+                        "inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border",
+                        lead
+                          ? "border-gold-400/30 bg-gold-400/15 text-gold-300"
+                          : "border-brand-100 bg-brand-50 text-brand-700",
+                      )}
+                    >
+                      <Icon name={objective.icon} className="h-6 w-6" />
+                    </span>
+
+                    <h3
+                      className={cn(
+                        "mt-5 font-display leading-snug font-semibold",
+                        lead ? "text-xl text-white sm:text-2xl" : "text-base text-ink",
+                      )}
+                    >
+                      {objective.title}
+                    </h3>
+
+                    <p
+                      className={cn(
+                        "mt-2.5 leading-relaxed",
+                        lead
+                          ? "max-w-md text-[15px] text-white/70"
+                          : "text-sm text-muted-foreground",
+                      )}
+                    >
+                      {objective.text}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </ul>
       </Container>
     </Section>
   );
 }
 
-/* ------------------------------------------------------------ Committee --- */
+/* ------------------------------------------------------------- Committee --- */
 
 function Committee() {
   return (
     <Section muted id="committee">
       <Container>
         <SectionHeading
-          eyebrow="Clause 4"
+          eyebrow="Who runs it"
           eyebrowIcon="Landmark"
-          title="Committee of Management"
+          title="The Committee of Management"
           lead={committee.remit}
         />
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <Reveal>
-            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
-              <h3 className="m-0 font-display text-lg font-semibold">
-                4.1 Composition and appointment
-              </h3>
-              <ClauseList items={committee.composition} className="mt-5" />
-            </div>
-          </Reveal>
-
-          <Reveal delay={90}>
-            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
-              <h3 className="m-0 font-display text-lg font-semibold">4.2 Term of office</h3>
-              <ClauseList items={committee.term} className="mt-5" tone="amber" />
-
-              <div className="mt-6 flex items-center gap-3 rounded-xl border border-brand-200 bg-brand-50/60 px-4 py-3">
-                <Icon name="CalendarClock" className="h-5 w-5 shrink-0 text-brand-600" />
-                <p className="m-0 text-sm font-medium text-ink">
-                  Two (2) years from the date of the first meeting
-                </p>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* ------------------------------------------------------------ Functions --- */
-
-function Functions() {
-  return (
-    <Section id="functions">
-      <Container>
-        <SectionHeading
-          eyebrow="Clause 5"
-          eyebrowIcon="ClipboardCheck"
-          title="Functions and responsibilities"
-        />
-
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {committeeFunctions.map((f, i) => (
-            <Reveal key={f.text} delay={i * 50}>
-              <div className="flex h-full items-start gap-3 rounded-2xl border border-border bg-card p-5 shadow-soft">
-                <IconTile name={f.icon} size="sm" />
-                <p className="m-0 text-sm leading-relaxed text-foreground/80">{f.text}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* ------------------------------------------------------------- Meetings --- */
-
-function Meetings() {
-  return (
-    <Section muted id="meetings">
-      <Container>
-        <SectionHeading eyebrow="Clause 6" eyebrowIcon="CalendarCheck" title="Meetings" />
-
+        {/* The three facts about the Committee itself */}
         <div className="mt-10 grid gap-4 sm:grid-cols-3">
-          {meetings.facts.map((f, i) => (
-            <Reveal key={f.label} delay={i * 70}>
-              <Card className="h-full text-center" hover={false}>
-                <IconTile name={f.icon} size="lg" className="mx-auto" />
-                <p className="mt-4 text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
-                  {f.label}
+          {committee.facts.map((fact, i) => (
+            <Reveal key={fact.label} delay={i * 70}>
+              <Card className="h-full" hover={false}>
+                <IconTile name={fact.icon} />
+                <p className="mt-4 m-0 font-display text-[11.5px] font-bold tracking-[0.12em] text-muted-foreground uppercase">
+                  {fact.label}
                 </p>
-                <p className="mt-1 font-display text-base font-semibold text-ink">{f.value}</p>
+                <p className="mt-1 m-0 font-display text-[15px] font-semibold text-ink">
+                  {fact.value}
+                </p>
               </Card>
             </Reveal>
           ))}
         </div>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <Reveal>
-            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
-              <h3 className="m-0 font-display text-lg font-semibold">Conduct of meetings</h3>
-              <ClauseList items={meetings.rules} className="mt-5" />
-            </div>
-          </Reveal>
-
-          <Reveal delay={90}>
-            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
-              <h3 className="m-0 font-display text-lg font-semibold">6.1 Minutes of meetings</h3>
-              <ClauseList items={meetings.minutes} className="mt-5" tone="sky" />
-            </div>
-          </Reveal>
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* -------------------------------------------------------- Office bearers --- */
-
-function OfficeBearers() {
-  return (
-    <Section id="office-bearers">
-      <Container>
-        <SectionHeading
-          eyebrow="Clause 10"
-          eyebrowIcon="Users"
-          title="Duties of office bearers"
-          lead="The Constitution defines the offices and their duties. Office bearers are appointed by Senior Management, so no names are recorded here."
-        />
-
-        <div className="mt-10 grid gap-5 lg:grid-cols-3">
-          {officeBearers.map((person, i) => {
-            const a = accent(person.accent);
-            return (
-              <Reveal key={person.role} delay={i * 80}>
-                <article className="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
-                  <div className={cn("flex items-center gap-3 px-6 py-5", a.bg)}>
-                    <span
-                      className={cn(
-                        "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border bg-white/80",
-                        a.border,
-                        a.text,
-                      )}
-                    >
-                      <Icon name={person.icon} className="h-5 w-5" />
-                    </span>
-                    <h3
-                      className={cn("m-0 font-display text-[15px] leading-snug font-bold", a.text)}
-                    >
-                      {person.role}
-                    </h3>
-                  </div>
-
-                  <ul className="m-0 flex flex-1 list-none flex-col gap-3 p-6">
-                    {person.duties.map((d) => (
-                      <li key={d} className="flex items-start gap-2.5">
-                        <Icon
-                          name="CircleCheck"
-                          className="mt-0.5 h-4 w-4 shrink-0 text-brand-500"
-                        />
-                        <span className="text-sm leading-relaxed text-muted-foreground">{d}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              </Reveal>
-            );
-          })}
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* -------------------------------------------------------------- Finance --- */
-
-function Finance() {
-  return (
-    <Section muted id="finance">
-      <Container>
-        <SectionHeading
-          eyebrow="Clause 9"
-          eyebrowIcon="Wallet"
-          title="Financial management and accounts"
-        />
-
-        <div className="mt-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <Reveal>
-            <Card className="h-full text-center" hover={false}>
-              <IconTile name="CalendarDays" size="lg" className="mx-auto" />
-              <p className="mt-4 text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
-                Financial year
-              </p>
-              <p className="mt-1 font-display text-xl font-extrabold text-ink">
-                {financialManagement.financialYear}
-              </p>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Unless otherwise determined by the Company.
-              </p>
-            </Card>
-          </Reveal>
-
-          <Reveal delay={90}>
-            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
-              <ClauseList items={financialManagement.rules} tone="emerald" />
-            </div>
-          </Reveal>
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* --------------------------------------------- Conduct, discipline, gaps --- */
-
-function ConductAndVacancies() {
-  return (
-    <Section id="conduct">
-      <Container>
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Reveal>
-            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
-              <SectionHeading
-                eyebrow="Clause 11"
-                eyebrowIcon="Scale"
-                title="Conduct and discipline"
-                className="max-w-none"
-              />
-              <ClauseList items={conduct} className="mt-6" tone="rose" />
-            </div>
-          </Reveal>
-
-          <Reveal delay={90}>
-            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
-              <SectionHeading
-                eyebrow="Clause 12"
-                eyebrowIcon="UserPlus"
-                title="Vacancies and replacement"
-                className="max-w-none"
-              />
-              <ClauseList items={vacancies} className="mt-6" tone="violet" />
-            </div>
-          </Reveal>
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* ----------------------------------------------- Amendment and provisions --- */
-
-function AmendmentAndGeneral() {
-  return (
-    <Section muted id="amendment">
-      <Container>
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Reveal>
-            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
-              <SectionHeading
-                eyebrow="Clause 13"
-                eyebrowIcon="PenLine"
-                title="Amendment of the Constitution"
-                className="max-w-none"
-              />
-              <ClauseList items={amendment} className="mt-6" tone="amber" />
-            </div>
-          </Reveal>
-
-          <Reveal delay={90}>
-            <div className="h-full rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
-              <SectionHeading
-                eyebrow="Clause 14"
-                eyebrowIcon="ScrollText"
-                title="General provisions"
-                className="max-w-none"
-              />
-              <ClauseList items={generalProvisions} className="mt-6" tone="slate" />
-            </div>
-          </Reveal>
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
-/* ----------------------------------------------------- Schedule II block --- */
-
-function DocumentControl() {
-  return (
-    <Section id="document-control">
-      <Container>
+        {/* What it does for a member */}
         <Reveal>
-          <div className="rounded-2xl border border-dashed border-border bg-surface p-6 sm:p-8">
-            <div className="flex flex-wrap items-center gap-3">
-              <IconTile name="FileText" tone="slate" />
-              <div>
-                <h2 className="m-0 font-display text-lg font-semibold">Schedule II — Approval</h2>
-                <p className="m-0 mt-1 text-sm text-muted-foreground">
-                  {society.constitution.title}, Version {society.constitution.version}
-                </p>
-              </div>
+          <div className="mt-8 grid gap-6 rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-8 lg:grid-cols-2">
+            <div>
+              <h3 className="m-0 font-display text-base font-semibold">What the Committee does</h3>
+              <ul className="m-0 mt-4 grid list-none gap-2.5 p-0">
+                {committeeFunctions.map((fn) => (
+                  <li key={fn.text} className="flex items-start gap-2.5">
+                    <Icon name={fn.icon} className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                    <span className="text-[14.5px] leading-relaxed text-foreground/80">
+                      {fn.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <dl className="m-0 mt-6 grid gap-3 sm:grid-cols-2">
-              {society.constitution.approvalPending.map((field) => (
-                <div
-                  key={field}
-                  className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card px-4 py-3"
-                >
-                  <dt className="text-sm font-medium text-ink">{field}</dt>
-                  <dd className="m-0 text-[12px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-                    Not yet recorded
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-              The approval block of the Constitution has not been completed, so no signatory or
-              effective date is shown here. It will be filled in once Senior Management has signed
-              the document.
-            </p>
+            <div>
+              <h3 className="m-0 font-display text-base font-semibold">When it meets</h3>
+              <div className="mt-4 grid gap-2.5">
+                {meetings.facts.map((fact) => (
+                  <div
+                    key={fact.label}
+                    className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3"
+                  >
+                    <Icon name={fact.icon} className="h-4 w-4 shrink-0 text-brand-600" />
+                    <span className="font-display text-[13px] font-semibold text-muted-foreground">
+                      {fact.label}
+                    </span>
+                    <span className="ml-auto text-right font-display text-[14px] font-semibold text-ink">
+                      {fact.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{meetings.note}</p>
+            </div>
           </div>
         </Reveal>
+
+        {/* Who to approach */}
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+          {officeBearers.map((bearer, i) => (
+            <Reveal key={bearer.role} delay={i * 80}>
+              <Card className="h-full">
+                <IconTile name={bearer.icon} tone={bearer.accent} />
+                <h3 className="mt-4 font-display text-[15px] font-semibold">{bearer.role}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {bearer.summary}
+                </p>
+              </Card>
+            </Reveal>
+          ))}
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------- Corporate management --- */
+
+/**
+ * The Company's leadership. Kept separate from the Committee of Management
+ * above, which is a different body: these are the officers of Hayleys Fentons
+ * Limited, and Senior Management is drawn from them.
+ *
+ * Anyone whose photograph has not been supplied yet falls back to their
+ * initials, so a missing file never leaves a hole in the grid.
+ */
+function CorporateManagement() {
+  return (
+    <Section id="management">
+      <Container>
+        <SectionHeading
+          eyebrow="The Company"
+          eyebrowIcon="Users"
+          title="Corporate management"
+          lead={`The leadership of ${society.parentCompany}. The Society’s Committee of Management is appointed by Senior Management from the Company.`}
+        />
+
+        <ul className="m-0 mt-10 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {corporateManagement.map((person, i) => (
+            <Reveal as="li" key={person.name} delay={Math.min(i, 8) * 50}>
+              <Card className="h-full text-center">
+                <Avatar name={person.name} src={person.photo} size="xl" className="mx-auto" />
+
+                <h3 className="mt-4 font-display text-[15px] leading-snug font-semibold text-ink">
+                  {person.name}
+                </h3>
+
+                <p className="mt-1.5 m-0 font-display text-[13px] font-semibold text-brand-700">
+                  {person.role}
+                </p>
+
+                {person.unit ? (
+                  <p className="mt-1 m-0 text-[12.5px] leading-snug text-muted-foreground">
+                    {person.unit}
+                  </p>
+                ) : null}
+              </Card>
+            </Reveal>
+          ))}
+        </ul>
       </Container>
     </Section>
   );

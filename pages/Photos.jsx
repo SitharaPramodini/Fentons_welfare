@@ -16,7 +16,7 @@ const spans = {
 };
 
 /**
- * Photographs from the Society's welfare activities — clause 8.3.
+ * Photographs from the Society's welfare activities - clause 8.3.
  *
  * The Constitution does not set an events calendar, so there is none here:
  * this page shows what has actually taken place, nothing scheduled.

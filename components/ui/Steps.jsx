@@ -3,7 +3,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
 
 /**
- * Numbered step list with a connecting spine — used for every "how do I…"
+ * Numbered step list with a connecting spine - used for every "how do I…"
  * process on the site (registration, loans, club memberships, claims,
  * resignation).
  *
@@ -45,7 +45,7 @@ export function Steps({ steps, className, startAt = 1 }) {
 }
 
 /**
- * Horizontal variant for wide sections — the same data, laid out as cards in a
+ * Horizontal variant for wide sections - the same data, laid out as cards in a
  * row with arrows between them. Falls back to a single column on mobile.
  */
 export function StepCards({ steps, className }) {
