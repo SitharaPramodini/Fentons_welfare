@@ -86,29 +86,73 @@ export const meetings = {
 /* --- Clause 13 - Office bearers -------------------------------------------
  * The three roles a member may need to approach, with a one-line summary of
  * each. The full schedules of duties are not reproduced.
+ *
+ * NAMES AND PHOTOGRAPHS
+ * ---------------------
+ * The Constitution names nobody - the Committee is appointed by Senior
+ * Management and changes - so names live here instead, and only here.
+ *
+ * To name an office bearer, set `name` below. For a photograph, drop a file
+ * into  src/assets/office-bearers/  named after the role:
+ *
+ *     president.jpg       secretary.jpg       treasurer.jpg
+ *
+ * (.jpg .jpeg .png .webp all work.) Nothing else needs editing. A bearer with
+ * a name but no photograph shows their initials; one with no name at all
+ * shows the role on its own, exactly as before.
  * ----------------------------------------------------------------------- */
 
-export const officeBearers = [
+const bearerPhotoFiles = import.meta.glob(
+  "../assets/office-bearers/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}",
+  { eager: true, import: "default" },
+);
+
+const bearerPhotos = Object.fromEntries(
+  Object.entries(bearerPhotoFiles).map(([path, src]) => [
+    path
+      .split("/")
+      .pop()
+      .replace(/\.[^.]+$/, "")
+      .toLowerCase(),
+    src,
+  ]),
+);
+
+const bearers = [
   {
+    key: "president",
     role: "President / Chairperson",
+    name: "Tharindu Chanaka",
     icon: "Landmark",
     accent: "brand",
     summary: "Gives the Committee overall direction and presides over its meetings.",
   },
   {
+    key: "secretary",
     role: "General Secretary / Secretary",
+    name: null,
     icon: "FileText",
     accent: "sky",
     summary: "Convenes meetings and keeps membership records, correspondence and minutes.",
   },
   {
+    key: "treasurer",
     role: "Treasurer",
+    name: null,
     icon: "Wallet",
     accent: "emerald",
     summary:
       "Keeps the accounts, records contributions, benefit payments and loans, and reports to the Committee.",
   },
 ];
+
+export const officeBearers = bearers.map((bearer) => ({
+  ...bearer,
+  photo: bearerPhotos[bearer.key] ?? null,
+}));
+
+/** The President, for the places that single them out. */
+export const president = officeBearers.find((b) => b.key === "president");
 
 /* Clause 12.6 - the one hard date the Constitution fixes. */
 export const financialYear = "1 April to 31 March";

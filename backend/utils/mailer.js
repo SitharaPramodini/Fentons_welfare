@@ -1,8 +1,8 @@
 /**
  * Outgoing e-mail.
  *
- * SMTP is configured through `.env`. When it is not configured — which is the
- * case until the Company's mail details are filled in — nothing is lost and
+ * SMTP is configured through `.env`. When it is not configured - which is the
+ * case until the Company's mail details are filled in - nothing is lost and
  * nothing throws: each message is written to `backend/outbox` as a readable
  * `.eml` file and logged. The whole application flow can then be exercised,
  * and the files show exactly what would have been sent.
@@ -74,7 +74,7 @@ async function writeToOutbox(message) {
 }
 
 /**
- * Sends one message. Always resolves — the caller is told whether it went out,
+ * Sends one message. Always resolves - the caller is told whether it went out,
  * but never has to handle a rejection.
  */
 export async function sendMail(message) {

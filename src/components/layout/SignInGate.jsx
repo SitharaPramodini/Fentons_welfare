@@ -3,7 +3,7 @@
  *
  * Used two ways: wrapped around a section (the loan terms, the application
  * forms) and as a whole-page guard. It never hints at what is behind it
- * beyond the heading it is given — a visitor is told to sign in, not told
+ * beyond the heading it is given - a visitor is told to sign in, not told
  * what they are missing.
  */
 import { useAuth } from "@/context/auth";

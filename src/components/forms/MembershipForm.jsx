@@ -39,7 +39,9 @@ const today = () => new Date().toISOString().slice(0, 10);
 
 /* Kept in step with backend/utils/uploads.js. */
 const ACCEPT = "application/pdf,image/jpeg,image/png";
-const acceptLabel = "PDF, JPG or PNG, up to 5 MB";
+const acceptLabel = "JPG or PNG up to 15 MB, or PDF up to 5 MB";
+const compressNote =
+  "Photographs are compressed to about 100-200 KB once uploaded, so a picture straight from your phone is fine.";
 
 /* A plain counter rather than crypto.randomUUID(), which is unavailable on a
  * plain-HTTP origin - the site may well be served from an internal address.
@@ -141,6 +143,25 @@ export function MembershipForm() {
     });
   };
 
+  /* Things that make the form unsubmittable however it is filled in - the
+   * Constitution not being uploaded, for instance. Without this a member
+   * could complete the whole form and only find out at the end, from a
+   * message about a box they were never shown. */
+  const [blockers, setBlockers] = useState({});
+  const blockedBy = Object.values(blockers).filter(Boolean);
+
+  /* One stable callback each. A factory called in the markup would return a
+   * new function on every render, which is exactly what sent the consent
+   * panels into a fetch loop. */
+  const onConsentBlocked = useCallback(
+    (reason) => setBlockers((prev) => ({ ...prev, consent: reason })),
+    [],
+  );
+  const onConstitutionBlocked = useCallback(
+    (reason) => setBlockers((prev) => ({ ...prev, constitution: reason })),
+    [],
+  );
+
   /* The spouse's papers are asked for only once a spouse is named. */
   const hasSpouse = String(form.values.spouse_name ?? "").trim().length > 0;
 
@@ -160,6 +181,20 @@ export function MembershipForm() {
 
   return (
     <form ref={form.formRef} onSubmit={form.submit} noValidate className="space-y-10">
+      {blockedBy.length > 0 ? (
+        <Notice tone="error" title="This form cannot be submitted at the moment">
+          <ul className="m-0 list-disc space-y-1 pl-5">
+            {blockedBy.map((reason) => (
+              <li key={reason}>{reason}</li>
+            ))}
+          </ul>
+          <p className="mt-2">
+            Please tell the Society&rsquo;s office. Nothing you type here will be lost if you come
+            back later.
+          </p>
+        </Notice>
+      ) : null}
+
       {prefill === "filled" ? (
         <Notice tone="info">
           <p>
@@ -260,7 +295,7 @@ export function MembershipForm() {
               key={relationship}
               className="grid gap-3 rounded-xl border border-border bg-surface p-3 sm:grid-cols-2"
             >
-              <Field label={`${relationship} — name`}>
+              <Field label={`${relationship} - name`}>
                 {(p) => (
                   <TextInput
                     {...p}
@@ -276,7 +311,7 @@ export function MembershipForm() {
                 )}
               </Field>
 
-              <Field label={`${relationship} — NIC number`}>
+              <Field label={`${relationship} - NIC number`}>
                 {(p) => (
                   <TextInput
                     {...p}
@@ -411,7 +446,7 @@ export function MembershipForm() {
       <FormSection
         step="4"
         title="Supporting documents"
-        hint={`A scan or a clear photograph is fine. ${acceptLabel}.`}
+        hint={`A scan or a clear photograph is fine. ${acceptLabel}. ${compressNote}`}
       >
         {/* The consent comes before the files: it would be the wrong way
          * round to collect somebody's certificates and ask afterwards. */}
@@ -420,6 +455,7 @@ export function MembershipForm() {
           checked={Boolean(form.values.data_consent_accepted)}
           onChange={(e) => form.setValue("data_consent_accepted", e.target.checked)}
           error={errors.data_consent_accepted}
+          onBlocked={onConsentBlocked}
         />
 
         <div className="mt-7 grid gap-5 sm:grid-cols-2">
@@ -505,6 +541,7 @@ export function MembershipForm() {
             checked={Boolean(form.values.constitution_accepted)}
             onChange={(e) => form.setValue("constitution_accepted", e.target.checked)}
             error={errors.constitution_accepted}
+            onBlocked={onConstitutionBlocked}
           />
 
           <Consent
@@ -542,7 +579,7 @@ export function MembershipForm() {
           <Button
             type="submit"
             size="lg"
-            disabled={submitting}
+            disabled={submitting || blockedBy.length > 0}
             iconRight={submitting ? undefined : "ArrowRight"}
           >
             {submitting ? <Spinner /> : null}

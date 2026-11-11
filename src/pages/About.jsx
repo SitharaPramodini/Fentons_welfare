@@ -190,13 +190,32 @@ function Committee() {
           </div>
         </Reveal>
 
-        {/* Who to approach */}
+        {/* Who to approach. A bearer who has been named shows their
+         * photograph; one who has not shows the role on its own, which is
+         * all the Constitution itself records. */}
         <div className="mt-8 grid gap-4 lg:grid-cols-3">
           {officeBearers.map((bearer, i) => (
             <Reveal key={bearer.role} delay={i * 80}>
               <Card className="h-full">
-                <IconTile name={bearer.icon} tone={bearer.accent} />
-                <h3 className="mt-4 font-display text-[15px] font-semibold">{bearer.role}</h3>
+                {bearer.name ? (
+                  <Avatar name={bearer.name} src={bearer.photo} size="lg" />
+                ) : (
+                  <IconTile name={bearer.icon} tone={bearer.accent} />
+                )}
+
+                {bearer.name ? (
+                  <>
+                    <h3 className="mt-4 font-display text-base font-semibold text-ink">
+                      {bearer.name}
+                    </h3>
+                    <p className="mt-1 m-0 font-display text-[13px] font-semibold text-brand-700">
+                      {bearer.role}
+                    </p>
+                  </>
+                ) : (
+                  <h3 className="mt-4 font-display text-[15px] font-semibold">{bearer.role}</h3>
+                )}
+
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {bearer.summary}
                 </p>

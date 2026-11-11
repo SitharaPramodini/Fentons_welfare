@@ -33,7 +33,7 @@ async function loadLoan(id) {
 
 /* --- The queue ------------------------------------------------------------ */
 
-/** GET /api/admin/pending — everything waiting on somebody. */
+/** GET /api/admin/pending - everything waiting on somebody. */
 export const pending = asyncHandler(async (_req, res) => {
   const loans = await query(
     `SELECT l.\`id\`, l.\`reference_no\`, l.\`full_name\`, l.\`epf_number\`, l.\`division\`,
@@ -157,7 +157,7 @@ export const declineLoan = asyncHandler(async (req, res) => {
 /* --- Deciding from the e-mail --------------------------------------------- */
 
 /**
- * GET /api/admin/decision/:token — what this link would do.
+ * GET /api/admin/decision/:token - what this link would do.
  *
  * The link never acts on its own: mail scanners and link previewers follow
  * URLs, and an application must not be decided by a spam filter. This just
@@ -189,7 +189,7 @@ export const describeDecision = asyncHandler(async (req, res) => {
   });
 });
 
-/** POST /api/admin/decision/:token — carry it out. */
+/** POST /api/admin/decision/:token - carry it out. */
 export const applyDecision = asyncHandler(async (req, res) => {
   const claims = readAction(req.params.token);
   if (!claims) {
@@ -251,7 +251,7 @@ export const listConsents = asyncHandler(async (req, res) => {
 });
 
 /**
- * GET /api/admin/consents/:id — one consent in full, including the exact
+ * GET /api/admin/consents/:id - one consent in full, including the exact
  * wording that was agreed to.
  */
 export const readConsent = asyncHandler(async (req, res) => {

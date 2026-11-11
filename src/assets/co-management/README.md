@@ -18,7 +18,7 @@ Drop each portrait here, named after the person's **first name in lower case**:
     dilshan.jpg         Dilshan Nanayakkara
     nanduni.jpg         Nanduni Dahanayaka
 
-`.jpg` `.jpeg` `.png` and `.webp` all work. Nothing else needs editing —
+`.jpg` `.jpeg` `.png` and `.webp` all work. Nothing else needs editing -
 `src/data/management.js` picks the files up automatically.
 
 Anyone without a photograph shows their initials instead, so the page is

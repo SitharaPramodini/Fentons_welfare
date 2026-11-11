@@ -13,7 +13,7 @@
  *     has already been decided.
  *
  * A link still lands on a confirmation page rather than acting on the GET
- * itself — mail scanners and link previewers follow URLs, and an application
+ * itself - mail scanners and link previewers follow URLs, and an application
  * must not be decided by a spam filter.
  */
 import jwt from "jsonwebtoken";

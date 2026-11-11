@@ -9,14 +9,15 @@ import { TopBar } from "@/components/layout/TopBar";
 import { Logo } from "@/components/layout/Logo";
 
 /**
- * Five pages plus the loan form, and the Apply button. That is the whole
- * navigation.
+ * The whole navigation: five public pages, plus Loans and Employees once
+ * signed in.
  *
  * There is no Contact, News, Clubs or Celebrations page: the Society records
  * no such details and none are invented.
  *
- * Six items need more room than five, so the bar switches to the drawer at
- * `lg` rather than `md`.
+ * Seven pills, the logo and the account controls need about 1200px. Below
+ * `xl` they do not fit, and squeezing them makes a label wrap and throws the
+ * bar out of line - so narrower screens get the drawer instead.
  */
 /* `members: true` marks a link that only appears once signed in. The loan
  * pages are among them: a visitor is shown nothing about the facility. */
@@ -75,14 +76,16 @@ export function Header() {
             : "border-b border-transparent bg-background",
         )}
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 sm:px-6 lg:px-8">
-          <Link to="/" aria-label="Welfare Society of Fentons - home">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-6 lg:px-8">
+          <Link to="/" aria-label="Welfare Society of Fentons - home" className="shrink-0">
             <Logo />
           </Link>
 
-          {/* Desktop nav - five links fit comfortably from md up */}
-          <nav aria-label="Main" className="hidden lg:block">
-            <ul className="m-0 flex list-none items-center gap-1 rounded-full border border-border bg-surface/80 p-1.5 backdrop-blur-sm">
+          {/* Desktop nav. Seven items is a lot for one bar, so the labels are
+           * held on one line and the bar may shrink rather than wrap - a pill
+           * breaking over two lines throws the whole header out. */}
+          <nav aria-label="Main" className="hidden min-w-0 xl:block">
+            <ul className="m-0 flex list-none items-center gap-0.5 rounded-full border border-border bg-surface/80 p-1.5 backdrop-blur-sm">
               {items.map((item) => {
                 const active = item.to === "/" ? path === "/" : path.startsWith(item.to);
                 return (
@@ -91,7 +94,7 @@ export function Header() {
                       to={item.to}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "relative inline-block rounded-full px-4 py-2 font-display text-[14.5px] font-semibold transition-all duration-300",
+                        "relative inline-block rounded-full px-3.5 py-2 font-display text-[14px] font-semibold whitespace-nowrap transition-all duration-300",
                         active
                           ? "bg-brand-800 text-white shadow-brand"
                           : "text-foreground/70 hover:bg-brand-50 hover:text-brand-800",
@@ -105,7 +108,7 @@ export function Header() {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             {isAdmin ? <NotificationBell /> : null}
 
             {isSignedIn ? (
@@ -142,7 +145,7 @@ export function Header() {
               aria-expanded={open}
               aria-controls="mobile-nav"
               aria-label={open ? "Close menu" : "Open menu"}
-              className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border bg-card text-ink transition hover:border-brand-400 hover:bg-brand-50 lg:hidden"
+              className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border bg-card text-ink transition hover:border-brand-400 hover:bg-brand-50 xl:hidden"
             >
               <Icon name={open ? "X" : "Menu"} className="h-5 w-5" />
             </button>
@@ -154,7 +157,7 @@ export function Header() {
       <div
         id="mobile-nav"
         className={cn(
-          "fixed inset-x-0 top-0 z-60 lg:hidden",
+          "fixed inset-x-0 top-0 z-60 xl:hidden",
           open ? "pointer-events-auto" : "pointer-events-none",
         )}
       >

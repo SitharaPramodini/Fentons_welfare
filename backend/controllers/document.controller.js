@@ -15,7 +15,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { queryOne } from "../dbconnection.js";
 import { ApiError, asyncHandler, readId } from "../utils/validate.js";
-import { pathForDocument } from "../utils/uploads.js";
+import { getObject } from "../utils/storage.js";
 import { recordAudit } from "../utils/audit.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -37,7 +37,7 @@ export function findConstitution() {
 }
 
 /**
- * GET /api/documents/constitution/status — whether the file is in place.
+ * GET /api/documents/constitution/status - whether the file is in place.
  * The form asks first, so it can explain a missing document rather than
  * offering a link that downloads nothing.
  */
@@ -52,7 +52,7 @@ export const constitutionStatus = asyncHandler(async (_req, res) => {
   });
 });
 
-/** GET /api/documents/constitution — the PDF itself, inline. */
+/** GET /api/documents/constitution - the PDF itself, inline. */
 export const constitution = asyncHandler(async (req, res) => {
   const file = findConstitution();
   if (!file) {
@@ -79,7 +79,7 @@ export const constitution = asyncHandler(async (req, res) => {
 });
 
 /**
- * GET /api/members/:id/documents/:docId — one certificate.
+ * GET /api/members/:id/documents/:docId - one certificate.
  *
  * A member may read only the documents attached to their own application.
  * The check is on the session's HRIS, not on anything in the URL.
@@ -89,7 +89,7 @@ export const memberDocument = asyncHandler(async (req, res) => {
   const docId = readId(req.params.docId, "document id");
 
   const row = await queryOne(
-    `SELECT d.\`stored_name\`, d.\`mime_type\`, d.\`original_name\`, m.\`hris\`
+    `SELECT d.\`stored_name\`, d.\`storage_key\`, d.\`mime_type\`, d.\`original_name\`, m.\`hris\`
        FROM \`member_documents\` d
        JOIN \`members\` m ON m.\`id\` = d.\`member_id\`
       WHERE d.\`id\` = ? AND d.\`member_id\` = ?`,
@@ -103,9 +103,6 @@ export const memberDocument = asyncHandler(async (req, res) => {
     throw new ApiError(404, "That document could not be found.");
   }
 
-  const file = pathForDocument(memberId, row.stored_name);
-  if (!fs.existsSync(file)) throw new ApiError(404, "That document could not be found.");
-
   /* That it was read, not what it contained. */
   await recordAudit(req, {
     action: "document.viewed",
@@ -114,11 +111,20 @@ export const memberDocument = asyncHandler(async (req, res) => {
     detail: { member_id: memberId },
   });
 
+  let object;
+  try {
+    object = await getObject(row.storage_key);
+  } catch {
+    throw new ApiError(404, "That document could not be found.");
+  }
+
   res.setHeader("Content-Type", row.mime_type);
   res.setHeader(
     "Content-Disposition",
     `inline; filename="${row.original_name.replace(/[^\w.\- ]+/g, "_")}"`,
   );
   res.setHeader("Cache-Control", "private, no-store");
-  return fs.createReadStream(file).pipe(res);
+
+  /* S3 hands back a stream; the local store hands back a buffer. */
+  return object.stream ? object.stream.pipe(res) : res.send(object.buffer);
 });

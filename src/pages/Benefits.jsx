@@ -75,7 +75,7 @@ function DeathDonations() {
  * The benefit schedule as a row of cards: category at the top, the amount
  * carrying the bottom of the card.
  *
- * Exactly one card is gold — the member's own cover, which is what most
+ * Exactly one card is gold - the member's own cover, which is what most
  * people come to this page to find. That is emphasis, and it only works
  * because the others stay quiet: five coloured cards would say nothing at
  * all. Every figure stays in ink and is tabular so the columns line up.

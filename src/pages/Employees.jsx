@@ -7,14 +7,14 @@ import { Reveal } from "@/components/ui/Reveal";
 import { PageHero } from "@/components/layout/PageHero";
 import { Button, Card, Container, EmptyState, Section } from "@/components/ui/primitives";
 import { Notice, Select, Spinner, TextInput } from "@/components/ui/form";
-import heroImage from "@/assets/events/iftar-long-table.jpg";
+import heroImage from "@/assets/employee.png";
 
 /**
  * Who is eligible to join, read from the Company's staff record.
  *
  * Signed-in members only, and deliberately limited: a name, a job title, a
  * division and whether that person has joined the Society. No date of birth,
- * NIC or address — the server does not send them, because a member's first
+ * NIC or address - the server does not send them, because a member's first
  * password is built from their HRIS number and date of birth.
  */
 export function Employees() {

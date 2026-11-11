@@ -4,7 +4,7 @@
  * Four of them: a membership application and a loan application reaching the
  * office, and the two answers a loan can get.
  *
- * On the declining letter — it never uses the word "rejected", and it does
+ * On the declining letter - it never uses the word "rejected", and it does
  * not leave somebody feeling judged for having asked. People apply to a
  * welfare fund when something has gone wrong in their lives. The letter says
  * plainly that the answer is no for now, explains that the Fund is shared and
@@ -183,7 +183,7 @@ export function notifyLoanApproved(loan, pdf) {
  *
  * Deliberately gentle, and the word "rejected" appears nowhere. Somebody who
  * asked a welfare fund for help should not be made to feel refused as a
- * person — the Fund is shared and finite, and that is what the letter says.
+ * person - the Fund is shared and finite, and that is what the letter says.
  */
 export function notifyLoanDeclined(loan) {
   if (!loan.email) return Promise.resolve({ sent: false, reason: "no-email" });

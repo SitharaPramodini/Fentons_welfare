@@ -12,7 +12,7 @@ import heroImage from "@/assets/events/womens-day-speakers.jpg";
  * The Society's office: everything waiting on a decision.
  *
  * Only the people listed in ADMIN_HRIS reach this page. The same decisions
- * can be taken from the links in the notification e-mail — both go through
+ * can be taken from the links in the notification e-mail - both go through
  * the same code, so neither can decide an application twice.
  */
 export function Admin() {
@@ -176,7 +176,7 @@ function LoanCard({ loan, onDone, setNotice }) {
           <label className="mb-2 block font-display text-[13px] font-semibold text-ink">
             {open === "approve"
               ? "A note for the member (optional)"
-              : "A note for the member (optional) — it will be included, gently, in the letter"}
+              : "A note for the member (optional) - it will be included, gently, in the letter"}
           </label>
           <TextArea
             rows={2}
@@ -312,7 +312,7 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label={`The Society's office${count ? ` — ${count} waiting` : ""}`}
+        aria-label={`The Society's office${count ? ` - ${count} waiting` : ""}`}
         aria-expanded={open}
         className="relative inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-border bg-card text-ink transition hover:border-brand-400 hover:bg-brand-50"
       >

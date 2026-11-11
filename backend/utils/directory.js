@@ -9,7 +9,7 @@
  * The eligible list is visible to every signed-in member, so `toDirectoryEntry`
  * deliberately returns no date of birth, NIC, address or personal mobile. The
  * date of birth matters most: a member's first password is their HRIS number
- * followed by their date of birth, and the HRIS number is their username — so
+ * followed by their date of birth, and the HRIS number is their username - so
  * publishing birthdates would hand over the account of anyone who has not yet
  * set a password of their own.
  *
@@ -19,7 +19,7 @@ import { intranetQuery, intranetQueryOne } from "../dbconnection.js";
 
 /* Clause 4.1 opens membership to every category of employee, so no employment
  * status is excluded. Narrow this list to restrict the Society to particular
- * group companies — it is the single place that decision lives. */
+ * group companies - it is the single place that decision lives. */
 export const ELIGIBLE_SUB_COMPANIES = null; // null = every company in the record
 
 const BASE_COLUMNS = `
@@ -39,7 +39,7 @@ function eligibilityClause(params) {
   return `e.HRIS IS NOT NULL AND e.sub_company IN (${ELIGIBLE_SUB_COMPANIES.map(() => "?").join(", ")})`;
 }
 
-/** The full record for one person — used for sign-in, their profile and pre-fill. */
+/** The full record for one person - used for sign-in, their profile and pre-fill. */
 export function findEmployeeByHris(hris) {
   return intranetQueryOne(
     `SELECT ${BASE_COLUMNS}, ${PRIVATE_COLUMNS} FROM \`employee\` e WHERE e.HRIS = ? LIMIT 1`,

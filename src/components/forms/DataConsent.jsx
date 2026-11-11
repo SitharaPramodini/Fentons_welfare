@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { Icon } from "@/components/ui/Icon";
 import { Consent, Notice, Spinner } from "@/components/ui/form";
@@ -16,9 +16,15 @@ import { Consent, Notice, Spinner } from "@/components/ui/form";
  * their marriage certificate is entitled to know when it will be destroyed
  * without having to ask.
  */
-export function DataConsent({ checked, onChange, error, name }) {
+export function DataConsent({ checked, onChange, error, name, onBlocked }) {
   const [consent, setConsent] = useState(null);
   const [state, setState] = useState("loading"); // loading | ready | error
+
+  /* Held in a ref, not read as a dependency: a parent that builds this
+   * callback inline would otherwise change its identity on every render and
+   * restart the fetch for ever. */
+  const report = useRef(onBlocked);
+  report.current = onBlocked;
 
   useEffect(() => {
     let live = true;
@@ -29,8 +35,13 @@ export function DataConsent({ checked, onChange, error, name }) {
         const found = r.data.consents.find((c) => c.key === "special_personal_data");
         setConsent(found ?? null);
         setState(found ? "ready" : "error");
+        report.current?.(found ? null : "The consent wording could not be loaded.");
       })
-      .catch(() => live && setState("error"));
+      .catch(() => {
+        if (!live) return;
+        setState("error");
+        report.current?.("The consent wording could not be loaded.");
+      });
     return () => {
       live = false;
     };

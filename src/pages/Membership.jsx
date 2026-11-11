@@ -12,7 +12,7 @@ import {
   SectionHeading,
 } from "@/components/ui/primitives";
 import { contributions, membership, society } from "@/data/society";
-import heroImage from "@/assets/events/cricket-team-selfie.jpg";
+import heroImage from "@/assets/membership.jpg";
 
 /**
  * Who may join, what it costs, what a member may expect and owe, when

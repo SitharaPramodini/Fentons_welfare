@@ -12,7 +12,7 @@ import heroImage from "@/assets/events/iftar-table-screen.jpg";
  * The Society's records: who consented to what, and what has happened.
  *
  * Read-only by design. Neither the consent register nor the audit trail can
- * be edited or deleted through the site — a trail that can be altered is not
+ * be edited or deleted through the site - a trail that can be altered is not
  * a trail.
  */
 export function Records() {
@@ -150,7 +150,7 @@ function ConsentRegister() {
                     {String(c.granted_at).slice(0, 16).replace("T", " ")}
                   </td>
                   <td className="px-5 py-3 text-[13.5px] font-medium text-ink">
-                    {c.full_name ?? (c.hris ? `HRIS ${c.hris}` : "—")}
+                    {c.full_name ?? (c.hris ? `HRIS ${c.hris}` : "-")}
                     {c.reference_no ? (
                       <span className="block text-[12px] font-normal text-muted-foreground">
                         {c.reference_no}
@@ -164,7 +164,7 @@ function ConsentRegister() {
                     {c.consent_version}
                   </td>
                   <td className="px-5 py-3 text-[12.5px] text-muted-foreground">
-                    {c.ip_address ?? "—"}
+                    {c.ip_address ?? "-"}
                   </td>
                   <td className="px-5 py-3 text-right">
                     <button

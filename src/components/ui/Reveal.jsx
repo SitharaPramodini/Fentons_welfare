@@ -6,7 +6,7 @@ import { observeReveal } from "@/lib/reveal";
  * Fades its children in when they scroll into view.
  *
  * The element registers itself on mount, so content that appears after the
- * page has loaded — search results, a profile fetched from the API — reveals
+ * page has loaded - search results, a profile fetched from the API - reveals
  * just like content that was there from the start.
  *
  * `delay` staggers items in a grid: pass the array index multiplied by ~60ms.

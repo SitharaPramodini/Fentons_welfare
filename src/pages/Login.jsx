@@ -19,7 +19,7 @@ import sidePhoto from "@/assets/events/sports-day-team.jpg";
  * A member has no password of their own until their first sign-in; until then
  * the only one that works is their HRIS number followed by their date of
  * birth. Redeeming it drops straight into the change-password step, which
- * cannot be skipped — that issued password is guessable by anyone who knows
+ * cannot be skipped - that issued password is guessable by anyone who knows
  * when they were born.
  */
 export function Login() {

@@ -9,13 +9,13 @@ import { society } from "@/data/society";
  * Deciding a loan from the link in the notification e-mail.
  *
  * The link does not decide anything on its own. It opens this page, which
- * shows what is about to happen and asks for confirmation — mail scanners and
+ * shows what is about to happen and asks for confirmation - mail scanners and
  * link previewers follow URLs, and an application must never be decided by a
  * spam filter.
  *
  * The token in the link is the authorisation: it names one loan and one
  * action, it expires, and the server refuses it once the loan has been
- * decided. No sign-in is needed, which is the point — the office can answer
+ * decided. No sign-in is needed, which is the point - the office can answer
  * from a phone.
  */
 export function Decision({ token }) {

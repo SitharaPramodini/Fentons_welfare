@@ -4,7 +4,7 @@
  *
  * Staff sign in with their HRIS number. They have no password until their
  * first sign-in, so the first one is derived from two things HR already
- * holds — see `initialPasswordFor`. Once used, it is hashed into
+ * holds - see `initialPasswordFor`. Once used, it is hashed into
  * `auth_users` and the member is asked to choose their own.
  */
 import crypto from "node:crypto";

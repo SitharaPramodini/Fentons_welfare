@@ -25,6 +25,9 @@ import {
 import { ApiError } from "./utils/validate.js";
 import { SOCIETY_INBOX, mailIsConfigured, verifyMail } from "./utils/mailer.js";
 import { ADMIN_HRIS } from "./utils/admin.js";
+import { describeStorage, testStorage } from "./utils/storage.js";
+import { describeTarget } from "./utils/compress.js";
+import { ACCEPTED_LABEL } from "./utils/uploads.js";
 
 const app = express();
 const PORT = Number(process.env.PORT || 4000);
@@ -69,11 +72,37 @@ app.use(cookieParser());
 app.use(express.json({ limit: "256kb" }));
 app.use(express.urlencoded({ extended: true, limit: "256kb" }));
 
-/* One line per request - enough to follow a submission through the log. */
-app.use((req, _res, next) => {
-  console.log(`${new Date().toISOString()}  ${req.method} ${req.originalUrl}`);
-  next();
-});
+/**
+ * Request logging.
+ *
+ * `LOG_REQUESTS` picks how much:
+ *
+ *   changes  (default) anything that changes something, plus any failure.
+ *            Reads are left out - a single page opening fires a handful of
+ *            them and they drown the log without telling you anything.
+ *   all      every request, for when you are chasing something.
+ *   off      nothing.
+ */
+const LOG_REQUESTS = (process.env.LOG_REQUESTS || "changes").toLowerCase();
+
+if (LOG_REQUESTS !== "off") {
+  app.use((req, res, next) => {
+    const started = Date.now();
+
+    res.on("finish", () => {
+      const changed = req.method !== "GET" && req.method !== "HEAD";
+      const failed = res.statusCode >= 400;
+      if (LOG_REQUESTS !== "all" && !changed && !failed) return;
+
+      console.log(
+        `${new Date().toISOString()}  ${req.method} ${req.originalUrl} ` +
+          `${res.statusCode} ${Date.now() - started}ms`,
+      );
+    });
+
+    next();
+  });
+}
 
 /* --- Routes --------------------------------------------------------------- */
 
@@ -106,6 +135,24 @@ app.use((err, _req, res, _next) => {
       success: false,
       message: err.message,
       ...(err.details ? { errors: err.details } : {}),
+    });
+  }
+
+  /* An upload that was too large, or too many of them. Multer throws its own
+   * error type, which would otherwise fall through to a bare 500 and tell the
+   * member nothing about what to do. */
+  if (err?.name === "MulterError") {
+    const field = err.field || "file";
+    const messages = {
+      LIMIT_FILE_SIZE: `That file is too large. ${ACCEPTED_LABEL}.`,
+      LIMIT_FILE_COUNT: "Too many files were attached.",
+      LIMIT_UNEXPECTED_FILE: "That file was not expected here.",
+    };
+    const message = messages[err.code] ?? "That file could not be accepted.";
+    return res.status(413).json({
+      success: false,
+      message: "Please correct the highlighted fields.",
+      errors: { [field]: message },
     });
   }
 
@@ -153,6 +200,13 @@ const server = app.listen(PORT, async () => {
     }
 
     console.log(`Admin: HRIS ${ADMIN_HRIS.join(", ") || "(nobody)"}`);
+
+    const store = await testStorage();
+    console.log(
+      store.ok
+        ? `Files: ${describeStorage()}, images compressed to ${describeTarget()}`
+        : `Files: ${describeStorage()} is NOT reachable - ${store.reason}`,
+    );
 
     if (mailIsConfigured()) {
       const mail = await verifyMail();

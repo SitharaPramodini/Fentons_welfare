@@ -121,7 +121,7 @@ export const logout = asyncHandler(async (_req, res) => {
 });
 
 /**
- * GET /api/auth/me — the signed-in member's staff record, plus their
+ * GET /api/auth/me - the signed-in member's staff record, plus their
  * membership and loan history.
  */
 export const me = asyncHandler(async (req, res) => {
@@ -141,7 +141,7 @@ export const me = asyncHandler(async (req, res) => {
   });
 });
 
-/** GET /api/auth/me/history — this member's membership and loans. */
+/** GET /api/auth/me/history - this member's membership and loans. */
 export const myHistory = asyncHandler(async (req, res) => {
   const { hris } = req.user;
 

@@ -30,7 +30,7 @@ export function requireAuth(req, _res, next) {
   }
 
   /* A member still on the issued password may read their own account and
-   * change it, but nothing else — otherwise the forced change is no barrier
+   * change it, but nothing else - otherwise the forced change is no barrier
    * at all to whoever guessed the password. */
   if (req.user.mustChangePassword && !req.allowDuringPasswordChange) {
     return next(

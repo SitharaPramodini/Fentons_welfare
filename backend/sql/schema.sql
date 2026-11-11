@@ -268,11 +268,14 @@ CREATE TABLE IF NOT EXISTS `member_documents` (
   `id`            INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `member_id`     INT UNSIGNED NOT NULL,
   `doc_type`      ENUM('birth_certificate','spouse_birth_certificate','marriage_certificate') NOT NULL,
-  `original_name` VARCHAR(255) NOT NULL,
-  `stored_name`   VARCHAR(255) NOT NULL,
-  `mime_type`     VARCHAR(100) NOT NULL,
-  `size_bytes`    INT UNSIGNED NOT NULL,
-  `uploaded_at`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `original_name`    VARCHAR(255) NOT NULL,
+  `stored_name`      VARCHAR(255) NOT NULL,
+  `storage_key`      VARCHAR(512) NULL,       /* full key, e.g. welfare/membership/... */
+  `storage_provider` ENUM('local','s3') NOT NULL DEFAULT 'local',
+  `mime_type`        VARCHAR(100) NOT NULL,
+  `size_bytes`       INT UNSIGNED NOT NULL,   /* as stored, after compression */
+  `original_bytes`   INT UNSIGNED NULL,       /* as uploaded */
+  `uploaded_at`      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_member_document` (`member_id`, `doc_type`),

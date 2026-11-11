@@ -2,7 +2,7 @@
  * Who is signed in.
  *
  * The session itself is an httpOnly cookie the browser holds and this code
- * cannot read — so on load the app asks the server who it is talking to. That
+ * cannot read - so on load the app asks the server who it is talking to. That
  * one call decides what the whole site shows: the loan pages, the eligible
  * employee list and the two application forms are all gated on it.
  *

@@ -23,7 +23,7 @@ import heroImage from "@/assets/events/womens-day-hall.jpg";
  * loan they have applied for.
  *
  * Everything is read-only. The staff details come from the Company's HR
- * record, which this site only ever reads — a correction has to go to HR, not
+ * record, which this site only ever reads - a correction has to go to HR, not
  * here, or the two would disagree.
  */
 export function Profile() {
@@ -90,7 +90,7 @@ function Details({ profile }) {
           eyebrow="Your details"
           eyebrowIcon="IdCard"
           title="Staff record"
-          lead="These come from the Company's HR record. They cannot be edited here — ask the HR Division to correct anything that is wrong."
+          lead="These come from the Company's HR record. They cannot be edited here - ask the HR Division to correct anything that is wrong."
         />
 
         <Reveal className="mt-10">

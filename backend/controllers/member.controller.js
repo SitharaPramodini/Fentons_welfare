@@ -201,7 +201,7 @@ async function findMemberOr404(id) {
 
   /* Metadata only - the files are served one at a time by their own route. */
   const documents = await query(
-    "SELECT `id`, `doc_type`, `original_name`, `mime_type`, `size_bytes`, `uploaded_at` FROM `member_documents` WHERE `member_id` = ? ORDER BY `id`",
+    "SELECT `id`, `doc_type`, `original_name`, `mime_type`, `size_bytes`, `original_bytes`, `storage_provider`, `uploaded_at` FROM `member_documents` WHERE `member_id` = ? ORDER BY `id`",
     [id],
   );
 
@@ -251,7 +251,7 @@ function readPayload(req) {
  *
  * A member always supplies their own birth certificate. The spouse's birth
  * certificate and the marriage certificate are required only when a spouse is
- * named — an unmarried applicant is not asked for papers that do not exist.
+ * named - an unmarried applicant is not asked for papers that do not exist.
  */
 function assertRequiredDocuments(data, files) {
   const present = (field) => Boolean(files?.[field]?.[0]);
@@ -288,7 +288,8 @@ export const createMember = asyncHandler(async (req, res) => {
 
   const { constitution_accepted, data_consent_accepted, ...columnsFromForm } = data;
 
-  let storedFor = null;
+  /* Keys written so far, so they can be removed if the transaction fails. */
+  let storedKeys = [];
 
   const result = await withTransaction(async (cx) => {
     const columns = {
@@ -319,23 +320,27 @@ export const createMember = asyncHandler(async (req, res) => {
     await cx.execute("UPDATE `members` SET `reference_no` = ? WHERE `id` = ?", [reference, id]);
     await insertDependants(cx, id, dependants);
 
-    /* Files are written only once the row exists. `storedFor` lets the catch
-     * below delete them if the transaction is rolled back after this point,
-     * so a failed submission never leaves certificates on disk. */
-    const documents = await storeDocuments(id, req.files);
-    storedFor = id;
+    /* Files are compressed and stored only once the row exists, so the
+     * reference number can go into the storage key. `storedKeys` lets the
+     * catch below remove them if the transaction is rolled back after this
+     * point - a failed submission never leaves certificates behind. */
+    const documents = await storeDocuments({ memberId: id, reference, files: req.files });
+    storedKeys = documents.map((d) => d.storage_key);
 
     if (documents.length > 0) {
       await cx.query(
-        "INSERT INTO `member_documents` (`member_id`, `doc_type`, `original_name`, `stored_name`, `mime_type`, `size_bytes`) VALUES ?",
+        "INSERT INTO `member_documents` (`member_id`, `doc_type`, `original_name`, `stored_name`, `storage_key`, `storage_provider`, `mime_type`, `size_bytes`, `original_bytes`) VALUES ?",
         [
           documents.map((d) => [
             d.member_id,
             d.doc_type,
             d.original_name,
             d.stored_name,
+            d.storage_key,
+            d.storage_provider,
             d.mime_type,
             d.size_bytes,
+            d.original_bytes,
           ]),
         ],
       );
@@ -343,7 +348,7 @@ export const createMember = asyncHandler(async (req, res) => {
 
     return { id, reference };
   }).catch(async (err) => {
-    if (storedFor !== null) await removeDocuments(storedFor);
+    await removeDocuments(storedKeys);
     return rethrowDuplicate(err);
   });
 

@@ -14,7 +14,7 @@ import {
   toProfile,
 } from "../utils/directory.js";
 
-/** GET /api/employees — searchable, paginated. */
+/** GET /api/employees - searchable, paginated. */
 export const listEmployees = asyncHandler(async (req, res) => {
   const { page, limit, offset } = readPaging(req.query, { defaultLimit: 24, maxLimit: 60 });
 
@@ -35,13 +35,13 @@ export const listEmployees = asyncHandler(async (req, res) => {
   });
 });
 
-/** GET /api/employees/companies — the filter options for that list. */
+/** GET /api/employees/companies - the filter options for that list. */
 export const employeeCompanies = asyncHandler(async (_req, res) => {
   return ok(res, { companies: await listCompanies() });
 });
 
 /**
- * GET /api/employees/prefill — the signed-in member's own staff record,
+ * GET /api/employees/prefill - the signed-in member's own staff record,
  * shaped for the two application forms.
  *
  * Deliberately keyed to the session rather than taking an HRIS parameter: a

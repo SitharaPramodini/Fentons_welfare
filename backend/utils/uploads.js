@@ -14,19 +14,24 @@
  *   - the first bytes of each file are checked against its claimed type. A
  *     browser's Content-Type header is whatever the client chose to send.
  */
-import crypto from "node:crypto";
-import fs from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import multer from "multer";
 import { ApiError } from "./validate.js";
+import { compressDocument, describeTarget } from "./compress.js";
+import { buildKey, deleteObject, putObject, storageProvider } from "./storage.js";
 
-const here = path.dirname(fileURLToPath(import.meta.url));
+/**
+ * What may arrive. Generous, because images are compressed to 100-200 KB on
+ * the way in and a photograph taken on a modern phone is routinely 8-12 MB -
+ * refusing those would mean telling members to go and shrink a picture
+ * themselves, which is exactly the work this is meant to save them.
+ */
+export const MAX_FILE_BYTES = Number(process.env.MAX_UPLOAD_MB || 15) * 1024 * 1024;
 
-/** Where uploaded documents live. Outside `public`, and git-ignored. */
-export const UPLOAD_ROOT = path.resolve(process.env.UPLOAD_DIR || path.join(here, "..", "uploads"));
-
-export const MAX_FILE_BYTES = Number(process.env.MAX_UPLOAD_MB || 5) * 1024 * 1024;
+/**
+ * PDFs are stored as supplied, so they get a tighter limit than images: a
+ * 15 MB PDF would stay 15 MB forever.
+ */
+export const MAX_PDF_BYTES = Number(process.env.MAX_PDF_MB || 5) * 1024 * 1024;
 
 /** The three documents the membership form collects. */
 export const DOCUMENT_TYPES = {
@@ -42,7 +47,11 @@ const ACCEPTED = {
   "image/png": { ext: ".png", magic: [[0x89, 0x50, 0x4e, 0x47]] },
 };
 
-export const ACCEPTED_LABEL = "PDF, JPG or PNG, up to " + MAX_FILE_BYTES / 1024 / 1024 + " MB";
+export const ACCEPTED_LABEL = `JPG or PNG up to ${MAX_FILE_BYTES / 1024 / 1024} MB, or PDF up to ${MAX_PDF_BYTES / 1024 / 1024} MB`;
+
+/* Images are compressed on arrival, so the limit here is what a phone camera
+ * produces rather than what is stored. */
+export const MAX_UPLOAD_LABEL = `${MAX_FILE_BYTES / 1024 / 1024} MB`;
 
 /**
  * Multer reads into memory rather than straight to disk: nothing is written
@@ -86,6 +95,9 @@ export function assertFilesAreValid(files) {
 
     if (file.size === 0) {
       errors[field] = `${label} appears to be empty.`;
+    } else if (file.mimetype === "application/pdf" && file.size > MAX_PDF_BYTES) {
+      errors[field] =
+        `${label} is ${(file.size / 1024 / 1024).toFixed(1)} MB. PDFs are kept as supplied, so please use one under ${MAX_PDF_BYTES / 1024 / 1024} MB, or attach a photograph instead.`;
     } else if (!signatureMatches(file.buffer, file.mimetype)) {
       errors[field] =
         `${label} does not look like a valid ${ACCEPTED[file.mimetype].ext.slice(1).toUpperCase()} file.`;
@@ -98,54 +110,49 @@ export function assertFilesAreValid(files) {
 }
 
 /**
- * Writes one member's documents to disk and returns the rows to record.
- * Called inside the application's transaction; `removeDocuments` undoes it if
- * the transaction then fails.
+ * Compresses each document and writes it to storage.
+ *
+ * Called after the member row exists, so the reference number can go into
+ * the key. Returns the rows to record; `removeDocuments` undoes it if the
+ * surrounding transaction then fails.
  */
-export async function storeDocuments(memberId, files) {
-  const dir = path.join(UPLOAD_ROOT, "members", String(memberId));
-  await fs.mkdir(dir, { recursive: true });
-
+export async function storeDocuments({ memberId, reference, files, area = "membership" }) {
   const written = [];
 
   for (const [field, list] of Object.entries(files ?? {})) {
     const file = list?.[0];
     if (!file) continue;
 
-    /* A random name: the uploader's own is kept only for display. */
-    const storedName = crypto.randomUUID() + ACCEPTED[file.mimetype].ext;
-    await fs.writeFile(path.join(dir, storedName), file.buffer, { mode: 0o600 });
+    const prepared = await compressDocument(file);
+    const key = buildKey({ area, docType: field, reference, ext: prepared.ext });
+
+    await putObject(key, prepared.buffer, prepared.mimetype);
+
+    if (prepared.note) {
+      console.log(`  upload: ${field} for ${reference} - ${prepared.note}`);
+    }
 
     written.push({
       member_id: memberId,
       doc_type: field,
       original_name: String(file.originalname).slice(0, 255),
-      stored_name: storedName,
-      mime_type: file.mimetype,
-      size_bytes: file.size,
+      stored_name: key.split("/").pop(),
+      storage_key: key,
+      storage_provider: storageProvider(),
+      mime_type: prepared.mimetype,
+      size_bytes: prepared.bytes,
+      original_bytes: prepared.originalBytes,
     });
   }
 
   return written;
 }
 
-/** Deletes a member's upload directory. Used to clean up a failed submission. */
-export async function removeDocuments(memberId) {
-  await fs
-    .rm(path.join(UPLOAD_ROOT, "members", String(memberId)), { recursive: true, force: true })
-    .catch(() => {});
-}
-
-/**
- * Resolves a stored document to an absolute path, refusing anything that
- * would point outside the member's own directory.
- */
-export function pathForDocument(memberId, storedName) {
-  const dir = path.join(UPLOAD_ROOT, "members", String(Number(memberId)));
-  const full = path.resolve(dir, path.basename(String(storedName)));
-
-  if (!full.startsWith(path.resolve(dir) + path.sep)) {
-    throw new ApiError(400, "That document could not be read.");
+/** Removes a set of stored documents. Used to clean up a failed submission. */
+export async function removeDocuments(keys = []) {
+  for (const key of keys) {
+    if (key) await deleteObject(key).catch(() => {});
   }
-  return full;
 }
+
+export { describeTarget };

@@ -129,7 +129,7 @@ export const api = {
    * Submits a membership application with its certificates.
    *
    * Multipart, because it carries files. Everything except the files goes in
-   * one JSON field so the nested family block survives intact — the server
+   * one JSON field so the nested family block survives intact - the server
    * parses it back and validates it exactly as it would a JSON body.
    */
   async registerMember(data, files = {}) {

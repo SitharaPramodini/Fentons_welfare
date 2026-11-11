@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { Icon } from "@/components/ui/Icon";
 import { Consent, Notice, Spinner } from "@/components/ui/form";
@@ -8,19 +8,25 @@ import { society } from "@/data/society";
  * Read the Constitution, then agree to abide by it.
  *
  * The agreement cannot be ticked until the document has actually been opened.
- * That is a nudge rather than proof — nobody can verify that a PDF was read —
+ * That is a nudge rather than proof - nobody can verify that a PDF was read -
  * but it stops the box being ticked past without the link ever being noticed,
  * which is the realistic failure.
  *
  * The file is confidential, so it is fetched from the authenticated API and
  * handed to the browser as a blob rather than linked from the public folder.
  */
-export function ConstitutionConsent({ checked, onChange, error, name }) {
+export function ConstitutionConsent({ checked, onChange, error, name, onBlocked }) {
   const [state, setState] = useState("checking"); // checking | ready | missing
   const [updatedAt, setUpdatedAt] = useState(null);
   const [opened, setOpened] = useState(false);
   const [opening, setOpening] = useState(false);
   const [failed, setFailed] = useState("");
+
+  /* Held in a ref, not read as a dependency: a parent that builds this
+   * callback inline would otherwise change its identity on every render and
+   * restart the fetch for ever. */
+  const report = useRef(onBlocked);
+  report.current = onBlocked;
 
   useEffect(() => {
     let live = true;
@@ -30,8 +36,17 @@ export function ConstitutionConsent({ checked, onChange, error, name }) {
         if (!live) return;
         setState(r.data.available ? "ready" : "missing");
         setUpdatedAt(r.data.updated_at);
+        report.current?.(
+          r.data.available
+            ? null
+            : "The Constitution has not been uploaded yet, so nobody can agree to it.",
+        );
       })
-      .catch(() => live && setState("missing"));
+      .catch(() => {
+        if (!live) return;
+        setState("missing");
+        report.current?.("The Constitution could not be loaded.");
+      });
     return () => {
       live = false;
     };

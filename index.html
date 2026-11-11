@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ea7318" />
+    <!-- Tints the browser chrome on mobile. The site's dark section ground
+         (brand-900); it was left on the old orange. -->
+    <meta name="theme-color" content="#0b3423" />
 
     <title>Welfare Society of Fentons</title>
     <meta
@@ -19,8 +21,9 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_LK" />
 
-    <link rel="icon" type="image/png" href="/logo.png" />
-    <link rel="apple-touch-icon" href="/logo.png" />
+    <!-- No tab icon. Removing the links is not quite enough on its own:
+         browsers fall back to requesting /favicon.ico, so an empty one is
+         served from public/ to stop a 404 on every page load. -->
   </head>
   <body>
     <div id="root"></div>

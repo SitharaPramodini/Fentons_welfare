@@ -1,5 +1,5 @@
 /* ===========================================================================
- * CORPORATE MANAGEMENT — the leadership of Hayleys Fentons Limited.
+ * CORPORATE MANAGEMENT - the leadership of Hayleys Fentons Limited.
  *
  * This is the Company's management, not the Welfare Society's Committee of
  * Management (which is appointed by Senior Management and names no members in
@@ -8,7 +8,7 @@
  * PHOTOGRAPHS
  * -----------
  * Drop a photograph into  src/assets/co-management/  named after the person's
- * first name, lower case — for example  hasith.jpg  or  roshani.png.
+ * first name, lower case - for example  hasith.jpg  or  roshani.png.
  * Accepted: .jpg .jpeg .png .webp
  *
  * Nothing else needs editing: the file is picked up automatically below. A
@@ -81,5 +81,5 @@ export const corporateManagement = people.map((person) => ({
   photo: photoFor(person),
 }));
 
-/** True once at least one photograph has been added — used to pick a layout. */
+/** True once at least one photograph has been added - used to pick a layout. */
 export const hasManagementPhotos = corporateManagement.some((p) => p.photo);

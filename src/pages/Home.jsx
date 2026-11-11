@@ -19,9 +19,10 @@ import { deathDonations, welfareLoan } from "@/data/benefits";
 import heroPhoto from "@/assets/events/iftar-group-photo.jpg";
 import archPhoto from "@/assets/events/netball-team.jpg";
 import insetPhoto from "@/assets/events/womens-day-gift.jpg";
-import cardDeath from "@/assets/events/iftar-colleagues.jpg";
-import cardLoan from "@/assets/events/cricket-batting.jpg";
-import cardActivities from "@/assets/events/womens-day-hall.jpg";
+/* The three illustrations for "What the Society provides". */
+import cardDeath from "@/assets/deathdonation.png";
+import cardLoan from "@/assets/distress.png";
+import cardActivities from "@/assets/activity.png";
 import facePhoto1 from "@/assets/events/womens-day-portrait.jpg";
 import facePhoto2 from "@/assets/events/cricket-team-selfie.jpg";
 import facePhoto3 from "@/assets/events/sports-day-team.jpg";

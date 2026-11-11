@@ -4,7 +4,7 @@ import { PageHero } from "@/components/layout/PageHero";
 import { LoanForm } from "@/components/forms/LoanForm";
 import { Card, Container, IconTile, Section, SectionHeading } from "@/components/ui/primitives";
 import { welfareLoan } from "@/data/benefits";
-import heroImage from "@/assets/events/cricket-winners-cheque.jpg";
+import heroImage from "@/assets/distress.png";
 
 /**
  * The welfare / emergency / distress loan, and the form by which a member

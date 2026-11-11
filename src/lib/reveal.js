@@ -3,7 +3,7 @@
  *
  * `.reveal` starts at `opacity: 0` and is shown by adding `.is-visible`. This
  * used to be armed once per route change, which meant anything that arrived
- * later — search results, a profile loaded from the API — was never observed
+ * later - search results, a profile loaded from the API - was never observed
  * and stayed invisible for good. Each `<Reveal>` now registers itself on
  * mount, so content that appears at any time is handled.
  *
