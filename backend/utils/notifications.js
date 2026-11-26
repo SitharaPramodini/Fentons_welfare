@@ -28,6 +28,38 @@ No. 200, Deans Road, Colombo 10`;
 
 /* --- To the office -------------------------------------------------------- */
 
+/** "2 parents, 1 parent-in-law, 3 children" - what the family block holds. */
+function describeFamily(member) {
+  const parents = member.parents ?? [];
+  const counted = [
+    [parents.filter((p) => !p.relationship.endsWith("In-Law")).length, "parent", "parents"],
+    [
+      parents.filter((p) => p.relationship.endsWith("In-Law")).length,
+      "parent-in-law",
+      "parents-in-law",
+    ],
+    [(member.children ?? []).length, "child", "children"],
+  ]
+    .filter(([count]) => count > 0)
+    .map(([count, one, many]) => `${count} ${count === 1 ? one : many}`);
+
+  return counted.length ? counted.join(", ") : "none named";
+}
+
+/** The checklist, counted: "identity card, birth certificate, 3 x child birth certificate". */
+function describeDocuments(documents = []) {
+  if (documents.length === 0) return "none attached";
+
+  const counts = new Map();
+  for (const doc of documents) {
+    counts.set(doc.doc_type, (counts.get(doc.doc_type) ?? 0) + 1);
+  }
+
+  return [...counts]
+    .map(([type, count]) => `${count > 1 ? `${count} x ` : ""}${type.replace(/_/g, " ")}`)
+    .join(", ");
+}
+
 /** A membership application has been submitted. */
 export function notifyMembershipSubmitted(member) {
   const lines = [
@@ -38,9 +70,12 @@ export function notifyMembershipSubmitted(member) {
     `  EPF No         ${member.epf_number}`,
     `  Company        ${member.company}`,
     `  Division       ${member.division}`,
+    `  Designation    ${member.designation ?? "-"}`,
     `  Category       ${member.employment_category}`,
+    `  Civil status   ${member.civil_status}`,
+    `  Family         ${describeFamily(member)}`,
     `  Effective from ${member.membership_effective_from}`,
-    `  Documents      ${member.documents?.length ? member.documents.map((d) => d.doc_type.replace(/_/g, " ")).join(", ") : "none attached"}`,
+    `  Documents      ${describeDocuments(member.documents)}`,
     ``,
     `The applicant has read the Constitution and agreed to abide by it.`,
     ``,

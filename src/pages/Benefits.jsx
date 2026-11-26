@@ -6,7 +6,13 @@ import { PageHero } from "@/components/layout/PageHero";
 import { SignInGate } from "@/components/layout/SignInGate";
 import { useAuth } from "@/context/auth";
 import { Card, Container, IconTile, Section, SectionHeading } from "@/components/ui/primitives";
-import { benefitsIntro, deathDonations, otherActivities, welfareLoan } from "@/data/benefits";
+import {
+  benefitsIntro,
+  deathDonations,
+  hgrcFuneralBenefit,
+  otherActivities,
+  welfareLoan,
+} from "@/data/benefits";
 import heroImage from "@/assets/events/womens-day-gift.jpg";
 
 /**
@@ -14,6 +20,12 @@ import heroImage from "@/assets/events/womens-day-gift.jpg";
  *
  * Schedule I of the Constitution repeats these same figures, so it is not
  * reproduced again here. What members pay in is on the Membership page.
+ *
+ * The HGRC Funeral Benefit also appears on this page, because a member
+ * looking up what they are covered for will look here - but it is a separate
+ * scheme, not a Society benefit, and the page keeps the two apart: its own
+ * section on its own ground, its own heading, and a line saying so before
+ * any figure is shown.
  */
 export function Benefits() {
   const { isSignedIn } = useAuth();
@@ -29,6 +41,7 @@ export function Benefits() {
         lead={benefitsIntro}
         jumpLinks={[
           { to: "/benefits#death-donation", label: "Death donation", icon: "HeartHandshake" },
+          { to: "/benefits#hgrc", label: "HGRC funeral benefit", icon: "Flower2" },
           /* The loan is not advertised to a visitor who is not signed in. */
           ...(isSignedIn
             ? [{ to: "/benefits#loan", label: "Welfare loan", icon: "HandCoins" }]
@@ -38,6 +51,7 @@ export function Benefits() {
       />
 
       <DeathDonations />
+      <HgrcFuneralBenefit />
       <WelfareLoan />
       <OtherActivities />
     </>
@@ -50,46 +64,56 @@ function DeathDonations() {
   return (
     <Section id="death-donation">
       <Container>
+        {/* The eyebrow names the payer, so this schedule and the HGRC one
+         * below can never be mistaken for each other. */}
         <SectionHeading
-          eyebrow="In bereavement"
+          eyebrow="Paid by the Welfare Society"
           eyebrowIcon="HeartHandshake"
           title="Death donation benefits"
         />
 
         <BenefitSchedule rows={deathDonations.rows} />
 
-        <Reveal delay={200}>
+        {/* <Reveal delay={200}>
           <div className="mt-8 flex items-start gap-3 rounded-2xl border border-border bg-surface p-5">
             <Icon name="Info" className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" />
             <p className="m-0 text-sm leading-relaxed text-muted-foreground">
               {deathDonations.condition}
             </p>
           </div>
-        </Reveal>
+        </Reveal> */}
       </Container>
     </Section>
   );
 }
 
+const scheduleColumns = {
+  /* Written out in full: Tailwind reads the source, so a class built from a
+   * variable would never be generated. Five rows sit on one line; six go
+   * three and three rather than leaving one stranded. */
+  3: "m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3",
+  5: "m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5",
+};
+
 /**
- * The benefit schedule as a row of cards: category at the top, the amount
- * carrying the bottom of the card.
+ * A benefit schedule as a row of cards: category at the top, the amount
+ * carrying the bottom of the card. Used by both schemes on this page.
  *
  * Exactly one card is gold - the member's own cover, which is what most
  * people come to this page to find. That is emphasis, and it only works
  * because the others stay quiet: five coloured cards would say nothing at
  * all. Every figure stays in ink and is tabular so the columns line up.
  */
-function BenefitSchedule({ rows }) {
+function BenefitSchedule({ rows, columns = 5, className }) {
   return (
-    <div className="relative mt-12">
+    <div className={cn("relative mt-12", className)}>
       {/* Soft gold wash behind the row, echoing the featured card. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-1/3 -z-10 h-40 bg-gradient-to-r from-transparent via-gold-200/45 to-transparent blur-3xl"
       />
 
-      <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <ul className={scheduleColumns[columns] ?? scheduleColumns[5]}>
         {rows.map((row, i) => (
           <Reveal as="li" key={row.category} delay={i * 70}>
             <div
@@ -146,6 +170,63 @@ function BenefitSchedule({ rows }) {
   );
 }
 
+/* --------------------------------------------------- HGRC funeral benefit --- */
+
+/**
+ * A separate scheme, given its own ground and its own heading.
+ *
+ * The order on the page is deliberate: the Society's own death donation
+ * first, then this. The amounts here are several times larger, so the note
+ * explaining that these are two different schemes comes before any figure,
+ * not after.
+ */
+function HgrcFuneralBenefit() {
+  const { name, separateNote, rows, contributions } = hgrcFuneralBenefit;
+
+  return (
+    <Section muted id="hgrc">
+      <Container>
+        <SectionHeading eyebrow="A separate scheme" eyebrowIcon="Flower2" title={name} />
+
+        <BenefitSchedule rows={rows} columns={3} className="mt-8" />
+
+        {/* What the scheme costs. Kept with the schedule it pays for, and
+         * labelled by employee category as HGRC sets it. */}
+        <Reveal delay={120}>
+          <div className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-soft sm:p-7">
+            <div className="flex items-center gap-3">
+              <IconTile name="Wallet" />
+              <div>
+                <h3 className="m-0 font-display text-lg font-semibold">{contributions.label}</h3>
+                <p className="mt-0.5 m-0 text-[13px] text-muted-foreground">
+                  Towards the HGRC scheme, and separate from the Society&rsquo;s own subscription.
+                </p>
+              </div>
+            </div>
+
+            <ul className="m-0 mt-6 grid list-none gap-3 p-0 sm:grid-cols-2">
+              {contributions.rows.map((row) => (
+                <li
+                  key={row.category}
+                  className="flex items-center gap-3.5 rounded-xl border border-border bg-surface px-5 py-4"
+                >
+                  <Icon name={row.icon} className="h-5 w-5 shrink-0 text-brand-500" />
+                  <span className="min-w-0 text-[14.5px] leading-snug text-foreground/80">
+                    {row.category}
+                  </span>
+                  <span className="ml-auto shrink-0 font-display text-lg font-bold text-ink tabular-nums">
+                    Rs. {row.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Reveal>
+      </Container>
+    </Section>
+  );
+}
+
 /* ---------------------------------------------------------- Welfare loan --- */
 
 function WelfareLoan() {
@@ -155,7 +236,7 @@ function WelfareLoan() {
    * amount, the terms, or that it exists beyond the invitation to sign in. */
   if (!isSignedIn) {
     return (
-      <Section muted id="loan">
+      <Section id="loan">
         <Container className="max-w-2xl">
           <SignInGate
             title="Members only"
@@ -167,7 +248,7 @@ function WelfareLoan() {
   }
 
   return (
-    <Section muted id="loan">
+    <Section id="loan">
       <Container>
         <SectionHeading
           eyebrow="Borrowing from the Society"
@@ -292,7 +373,7 @@ function WelfareLoan() {
 
 function OtherActivities() {
   return (
-    <Section id="other">
+    <Section muted id="other">
       <Container>
         <SectionHeading
           eyebrow="Beyond the benefits"

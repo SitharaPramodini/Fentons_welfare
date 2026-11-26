@@ -57,6 +57,7 @@ export const prefillForMe = asyncHandler(async (req, res) => {
     found: true,
     hris: p.hris,
     full_name: p.full_name,
+    calling_name: p.calling_name,
     date_of_birth: p.date_of_birth,
     nic_number: p.nic_number,
     identity_number: p.nic_number,

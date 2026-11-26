@@ -16,7 +16,7 @@ import { useAuth } from "@/context/auth";
 import { committee, committeeFunctions, meetings } from "@/data/governance";
 import { deathDonations, welfareLoan } from "@/data/benefits";
 
-import heroPhoto from "@/assets/events/iftar-group-photo.jpg";
+import heroPhoto from "@/assets/events/OfficeTeamPhoto.png";
 import archPhoto from "@/assets/events/netball-team.jpg";
 import insetPhoto from "@/assets/events/womens-day-gift.jpg";
 /* The three illustrations for "What the Society provides". */

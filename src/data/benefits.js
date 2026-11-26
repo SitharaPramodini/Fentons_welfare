@@ -121,6 +121,42 @@ export const welfareLoan = {
   ],
 };
 
+/* ===========================================================================
+ * HGRC FUNERAL BENEFIT
+ *
+ * NOT a Welfare Society of Fentons benefit.
+ *
+ * This is a separate scheme with its own schedule and its own monthly
+ * contribution, and it is deliberately kept apart from everything above: the
+ * figures are several times larger than the Society's own death donation, so
+ * the two must never read as one list. Anything added here must come from
+ * HGRC, and nothing here belongs in `deathDonations`.
+ * ======================================================================== */
+
+export const hgrcFuneralBenefit = {
+  name: "HGRC Funeral Benefit",
+
+  rows: [
+    { category: "HGRC member (employee)", amount: 400000, icon: "IdCard", featured: true },
+    { category: "Member’s spouse", note: "Wife / husband", amount: 200000, icon: "Heart" },
+    { category: "Member’s child", note: "1 - 18 years", amount: 200000, icon: "Baby" },
+    { category: "Member’s father / mother", amount: 200000, icon: "Users" },
+    { category: "Member’s father-in-law / mother-in-law", amount: 200000, icon: "Users" },
+    { category: "Child under 1 year / stillborn child", amount: 50000, icon: "Baby" },
+  ],
+
+  /* What the scheme costs, by employee category. Separate from the Society's
+   * own joining fee and monthly subscription, which are on the Membership
+   * page. */
+  contributions: {
+    label: "Monthly contribution",
+    rows: [
+      { category: "Executive category and above staff", amount: 620, icon: "Briefcase" },
+      { category: "Non-executive staff", amount: 500, icon: "Users" },
+    ],
+  },
+};
+
 /* --- Clause 11.3 - Other existing welfare activities and facilities ------- */
 
 export const otherActivities = {

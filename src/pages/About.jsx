@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import { useAuth } from "@/context/auth";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
@@ -7,7 +10,7 @@ import { Card, Container, IconTile, Section, SectionHeading } from "@/components
 import { objectives, society } from "@/data/society";
 import { committee, committeeFunctions, meetings, officeBearers } from "@/data/governance";
 import { corporateManagement } from "@/data/management";
-import heroImage from "@/assets/events/iftar-group-photo.jpg";
+import heroImage from "@/assets/events/sports-day-team.jpg";
 
 /**
  * What the Society is for and who runs it.
@@ -123,6 +126,26 @@ function Objectives() {
 /* ------------------------------------------------------------- Committee --- */
 
 function Committee() {
+  const { isSignedIn } = useAuth();
+  const [contacts, setContacts] = useState({});
+
+  /* Only asked for once signed in, and only ever answered to a session -
+   * these addresses are not in the public bundle. */
+  useEffect(() => {
+    if (!isSignedIn) {
+      setContacts({});
+      return;
+    }
+    let live = true;
+    api
+      .societyContacts()
+      .then((r) => live && setContacts(r.data.contacts ?? {}))
+      .catch(() => live && setContacts({}));
+    return () => {
+      live = false;
+    };
+  }, [isSignedIn]);
+
   return (
     <Section muted id="committee">
       <Container>
@@ -196,7 +219,7 @@ function Committee() {
         <div className="mt-8 grid gap-4 lg:grid-cols-3">
           {officeBearers.map((bearer, i) => (
             <Reveal key={bearer.role} delay={i * 80}>
-              <Card className="h-full">
+              <Card className="flex h-full flex-col">
                 {bearer.name ? (
                   <Avatar name={bearer.name} src={bearer.photo} size="lg" />
                 ) : (
@@ -219,6 +242,16 @@ function Committee() {
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {bearer.summary}
                 </p>
+
+                {contacts[bearer.key]?.email ? (
+                  <a
+                    href={`mailto:${contacts[bearer.key].email}`}
+                    className="mt-auto inline-flex items-center gap-2 pt-4 font-display text-[13px] font-semibold break-all text-brand-700 underline-offset-4 transition hover:text-brand-900 hover:underline"
+                  >
+                    <Icon name="Mail" className="h-4 w-4 shrink-0" />
+                    {contacts[bearer.key].email}
+                  </a>
+                ) : null}
               </Card>
             </Reveal>
           ))}

@@ -117,7 +117,7 @@ export function Photos() {
         />
       </Section>
 
-      <Section muted>
+      {/* <Section muted>
         <Container>
           <Reveal>
             <p className="mx-auto max-w-3xl text-center text-[15px] leading-relaxed text-muted-foreground">
@@ -125,7 +125,7 @@ export function Photos() {
             </p>
           </Reveal>
         </Container>
-      </Section>
+      </Section> */}
     </>
   );
 }

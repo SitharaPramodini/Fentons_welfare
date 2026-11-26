@@ -207,6 +207,8 @@ function MembershipCard({ membership }) {
         <dl className="m-0 mt-7 grid gap-x-8 border-t border-border pt-2 sm:grid-cols-2">
           <Row label="Applied on" value={String(membership.created_at ?? "").slice(0, 10)} />
           <Row label="Membership from" value={membership.membership_effective_from} />
+          <Row label="Civil status" value={membership.civil_status} />
+          <Row label="Designation" value={membership.designation} />
           <Row
             label="Entrance fee"
             value={`Rs. ${Number(membership.joining_fee).toLocaleString("en-LK")}`}
@@ -226,11 +228,14 @@ function MembershipCard({ membership }) {
             <ul className="m-0 mt-3 flex list-none flex-wrap gap-2 p-0">
               {dependants.map((d) => (
                 <li
-                  key={`${d.relationship}-${d.full_name}`}
+                  key={d.id}
                   className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-[13px]"
                 >
                   <span className="font-semibold text-ink">{d.full_name}</span>
-                  <span className="text-muted-foreground">{d.relationship}</span>
+                  <span className="text-muted-foreground">
+                    {d.relationship}
+                    {d.gender ? `, ${d.gender.toLowerCase()}` : ""}
+                  </span>
                 </li>
               ))}
             </ul>

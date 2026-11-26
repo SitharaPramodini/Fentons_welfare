@@ -148,6 +148,14 @@ export function Eyebrow({ children, className, icon = "Sprout", invert = false }
 /**
  * Torn paper / brush edge between a dark section and the page behind it.
  * `position` says which side of the section it sits on.
+ *
+ * The path closes at y=56, well past the 40-unit viewBox, and the svg clips
+ * it. That overshoot is what stops a hairline appearing along the section's
+ * edge: a section rarely ends on a whole device pixel, so a path that closed
+ * exactly at the boundary would leave that last part-covered row
+ * anti-aliased, and the dark ground behind would show through it as a thin
+ * grey line - visible at some display scalings and not others. Filling past
+ * the edge leaves no soft row to see through.
  */
 export function BrushEdge({ className, position = "bottom", tone = "text-background" }) {
   return (
@@ -166,7 +174,7 @@ export function BrushEdge({ className, position = "bottom", tone = "text-backgro
       >
         <path
           fill="currentColor"
-          d="M0 40V21.9C20 22.1 80 23.5 120 23C160 22.5 200 19.9 240 18.9C280 17.9 320 17.8 360 17.2C400 16.6 440 16 480 15.3C520 14.6 560 11.7 600 12.9C640 14.1 680 20.6 720 22.5C760 24.4 800 24.8 840 24.5C880 24.2 920 22.7 960 20.9C1000 19.1 1040 14.7 1080 13.6C1120 12.4 1160 13.1 1200 14.1C1240 15 1280 18.4 1320 19.1C1360 19.8 1420 18.5 1440 18.3V40Z"
+          d="M0 56V21.9C20 22.1 80 23.5 120 23C160 22.5 200 19.9 240 18.9C280 17.9 320 17.8 360 17.2C400 16.6 440 16 480 15.3C520 14.6 560 11.7 600 12.9C640 14.1 680 20.6 720 22.5C760 24.4 800 24.8 840 24.5C880 24.2 920 22.7 960 20.9C1000 19.1 1040 14.7 1080 13.6C1120 12.4 1160 13.1 1200 14.1C1240 15 1280 18.4 1320 19.1C1360 19.8 1420 18.5 1440 18.3V56Z"
         />
       </svg>
     </div>

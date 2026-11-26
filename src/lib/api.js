@@ -119,6 +119,9 @@ export const api = {
     return response.blob();
   },
 
+  /** How to reach the office bearers. Signed-in members only. */
+  societyContacts: () => request("/society/contacts"),
+
   /* --- Eligible employees (signed-in only) --- */
   employees: (params = "", signal) => request(`/employees${params}`, { signal }),
   employeeCompanies: () => request("/employees/companies"),

@@ -2,8 +2,12 @@
  * WELFARE SOCIETY OF FENTONS - database schema
  *
  * Source forms:
- *   WFR/F/09/2020 Rev 02 - Membership Application Form
- *   WFR/LOAN/2013        - Loan Application
+ *   WSF/01/2026 Rev 01 (19/11/2026) - Membership Application & Declaration
+ *   WFR/LOAN/2013                   - Loan Application
+ *
+ * WSF/01/2026 replaced WFR/F/09/2020 Rev 02. Columns it added are marked
+ * `WSF/01/2026`; sql/migrations/ carries the ALTERs for a database created
+ * before it.
  *
  * Every column below comes from a field on one of those two forms. The few
  * exceptions are marked `web only` and exist because an online submission
@@ -29,16 +33,21 @@ USE `Welfare_Society_Fentons`;
 CREATE TABLE IF NOT EXISTS `members` (
   `id`                        INT UNSIGNED  NOT NULL AUTO_INCREMENT,
   `reference_no`              VARCHAR(32)   NULL,            /* web only: WSF-M-2026-0001 */
-  `form_revision`             VARCHAR(40)   NOT NULL DEFAULT 'WFR/F/09/2020 Rev 02',
+  `form_revision`             VARCHAR(40)   NOT NULL DEFAULT 'WSF/01/2026 Rev 01',
 
-  /* Member details */
-  `full_name`                 VARCHAR(150)  NOT NULL,
+  /* Employee information */
+  `full_name`                 VARCHAR(150)  NOT NULL,        /* as per NIC */
+  `calling_name`              VARCHAR(100)  NULL,            /* WSF/01/2026 */
   `permanent_address`         VARCHAR(255)  NOT NULL,
   `date_of_birth`             DATE          NOT NULL,
   `nic_number`                VARCHAR(20)   NOT NULL,
   `contact_number`            VARCHAR(20)   NOT NULL,
   `email`                     VARCHAR(150)  NULL,            /* web only: acknowledgement address */
+
+  /* Civil status, and the spouse named under it */
+  `civil_status`              ENUM('Single','Married','Divorced') NOT NULL DEFAULT 'Single', /* WSF/01/2026 */
   `spouse_name`               VARCHAR(150)  NULL,
+  `spouse_nic_number`         VARCHAR(20)   NULL,            /* WSF/01/2026 */
 
   /* Declaration - membership requested with effect from this date */
   `membership_effective_from` DATE          NOT NULL,
@@ -58,9 +67,10 @@ CREATE TABLE IF NOT EXISTS `members` (
   `joining_fee`               DECIMAL(10,2) NOT NULL DEFAULT 250.00,
   `monthly_fee`               DECIMAL(10,2) NOT NULL DEFAULT 200.00,
 
-  /* FOR HR DIVISION */
+  /* Employment, verified by the HR Division */
   `company`                   ENUM('Fentons','EnergyNet','FSF','HEL') NOT NULL,
   `division`                  VARCHAR(100)  NOT NULL,
+  `designation`               VARCHAR(150)  NULL,            /* WSF/01/2026 */
   `epf_number`                VARCHAR(20)   NOT NULL,
   `employment_category`       ENUM('Non-Executive','Executive')       NOT NULL,
   `hris`                      INT UNSIGNED  NULL,   /* the signed-in member who submitted this */
@@ -96,8 +106,10 @@ CREATE TABLE IF NOT EXISTS `member_dependants` (
   `id`            INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `member_id`     INT UNSIGNED NOT NULL,
   `relationship`  ENUM('Mother','Father','Mother-In-Law','Father-In-Law','Child') NOT NULL,
+  `position`      TINYINT UNSIGNED NOT NULL DEFAULT 0,  /* children: the numbered row, 1-5 */
   `full_name`     VARCHAR(150) NOT NULL,
   `nic_number`    VARCHAR(20)  NULL,   /* parents: collected to verify a death donation claim */
+  `gender`        ENUM('Male','Female') NULL,  /* WSF/01/2026, children only */
   `date_of_birth` DATE         NULL,   /* children: evidences the 06 months / 21 years rule */
   `created_at`    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -267,7 +279,11 @@ CREATE TABLE IF NOT EXISTS `auth_users` (
 CREATE TABLE IF NOT EXISTS `member_documents` (
   `id`            INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `member_id`     INT UNSIGNED NOT NULL,
-  `doc_type`      ENUM('birth_certificate','spouse_birth_certificate','marriage_certificate') NOT NULL,
+  /* The checklist at the foot of WSF/01/2026. A child's certificate carries
+   * the numbered row it belongs to in `doc_index`; everything else is 0. */
+  `doc_type`      ENUM('id_card','birth_certificate','spouse_id_card','spouse_birth_certificate',
+                       'marriage_certificate','child_birth_certificate') NOT NULL,
+  `doc_index`     TINYINT UNSIGNED NOT NULL DEFAULT 0,
   `original_name`    VARCHAR(255) NOT NULL,
   `stored_name`      VARCHAR(255) NOT NULL,
   `storage_key`      VARCHAR(512) NULL,       /* full key, e.g. welfare/membership/... */
@@ -278,7 +294,7 @@ CREATE TABLE IF NOT EXISTS `member_documents` (
   `uploaded_at`      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_member_document` (`member_id`, `doc_type`),
+  UNIQUE KEY `uq_member_document` (`member_id`, `doc_type`, `doc_index`),
   KEY `ix_documents_member` (`member_id`),
   CONSTRAINT `fk_documents_member`
     FOREIGN KEY (`member_id`) REFERENCES `members` (`id`)

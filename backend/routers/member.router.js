@@ -1,5 +1,5 @@
 /**
- * /api/members - membership applications (WFR/F/09/2020 Rev 02).
+ * /api/members - membership applications (WSF/01/2026 Rev 01).
  *
  * Literal paths are declared before `/:id` so that `/stats`, `/declinations`
  * and `/lookup/...` are not swallowed by the id route.

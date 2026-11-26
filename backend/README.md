@@ -2,10 +2,10 @@
 
 Express + MySQL service behind the two application forms on the website:
 
-| Form                   | Code                   | Endpoint        |
-| ---------------------- | ---------------------- | --------------- |
-| Membership Application | `WFR/F/09/2020 Rev 02` | `/api/members`  |
-| Loan Application       | `WFR/LOAN/2013`        | `/api/loans`    |
+| Form                   | Code                 | Endpoint       |
+| ---------------------- | -------------------- | -------------- |
+| Membership Application | `WSF/01/2026 Rev 01` | `/api/members` |
+| Loan Application       | `WFR/LOAN/2013`      | `/api/loans`   |
 
 ## Getting started
 
@@ -50,11 +50,11 @@ backend/
 
 ## Tables
 
-| Table                     | What it holds                                              |
-| ------------------------- | ---------------------------------------------------------- |
-| `members`                 | One membership application per row                          |
-| `member_dependants`       | Parents, parents-in-law and children named on the form      |
-| `membership_declinations` | The lower half of the form - employees who decline to join  |
+| Table                     | What it holds                                                |
+| ------------------------- | ------------------------------------------------------------ |
+| `members`                 | One membership application per row                           |
+| `member_dependants`       | Parents, parents-in-law and children named on the form       |
+| `membership_declinations` | The lower half of the form - employees who decline to join   |
 | `loan_applications`       | One loan application per row, including the office-use block |
 | `loan_guarantors`         | Section 4, the guarantor                                     |
 
@@ -62,36 +62,36 @@ backend/
 
 ### Membership
 
-| Method   | Path                         | Purpose                                  |
-| -------- | ---------------------------- | ---------------------------------------- |
-| `POST`   | `/api/members`               | Submit an application (public)            |
-| `POST`   | `/api/members/decline`       | Record a decision not to join (public)    |
-| `GET`    | `/api/members/lookup/:epf`   | Pre-fill the loan form (public)           |
-| `GET`    | `/api/members`               | List - `?status=&company=&search=&page=`  |
-| `GET`    | `/api/members/stats`         | Counts by status                          |
-| `GET`    | `/api/members/declinations`  | List declinations                         |
-| `GET`    | `/api/members/:id`           | One application with its dependants       |
-| `PUT`    | `/api/members/:id`           | Correct an application                    |
-| `PATCH`  | `/api/members/:id/status`    | Approve or reject                         |
-| `DELETE` | `/api/members/:id`           | Delete (dependants cascade)               |
+| Method   | Path                        | Purpose                                  |
+| -------- | --------------------------- | ---------------------------------------- |
+| `POST`   | `/api/members`              | Submit an application (public)           |
+| `POST`   | `/api/members/decline`      | Record a decision not to join (public)   |
+| `GET`    | `/api/members/lookup/:epf`  | Pre-fill the loan form (public)          |
+| `GET`    | `/api/members`              | List - `?status=&company=&search=&page=` |
+| `GET`    | `/api/members/stats`        | Counts by status                         |
+| `GET`    | `/api/members/declinations` | List declinations                        |
+| `GET`    | `/api/members/:id`          | One application with its dependants      |
+| `PUT`    | `/api/members/:id`          | Correct an application                   |
+| `PATCH`  | `/api/members/:id/status`   | Approve or reject                        |
+| `DELETE` | `/api/members/:id`          | Delete (dependants cascade)              |
 
 Approving a member adopts any loan applications already filed under the same
 EPF number, linking them to the membership record.
 
 ### Loans
 
-| Method   | Path                            | Purpose                                 |
-| -------- | ------------------------------- | --------------------------------------- |
-| `POST`   | `/api/loans`                    | Submit an application (public)           |
-| `GET`    | `/api/loans`                    | List - `?status=&epf=&search=&page=`     |
-| `GET`    | `/api/loans/stats`              | Counts and amounts by status             |
-| `GET`    | `/api/loans/member/:memberId`   | Every loan filed by one member           |
-| `GET`    | `/api/loans/:id`                | One application with its guarantor       |
-| `PUT`    | `/api/loans/:id`                | Correct an undecided application         |
-| `PATCH`  | `/api/loans/:id/decision`       | Exco Approval - section 6                |
-| `PATCH`  | `/api/loans/:id/release`        | Release details - section 6              |
-| `PATCH`  | `/api/loans/:id/settle`         | Mark as paid off                         |
-| `DELETE` | `/api/loans/:id`                | Delete (guarantor cascades)              |
+| Method   | Path                          | Purpose                              |
+| -------- | ----------------------------- | ------------------------------------ |
+| `POST`   | `/api/loans`                  | Submit an application (public)       |
+| `GET`    | `/api/loans`                  | List - `?status=&epf=&search=&page=` |
+| `GET`    | `/api/loans/stats`            | Counts and amounts by status         |
+| `GET`    | `/api/loans/member/:memberId` | Every loan filed by one member       |
+| `GET`    | `/api/loans/:id`              | One application with its guarantor   |
+| `PUT`    | `/api/loans/:id`              | Correct an undecided application     |
+| `PATCH`  | `/api/loans/:id/decision`     | Exco Approval - section 6            |
+| `PATCH`  | `/api/loans/:id/release`      | Release details - section 6          |
+| `PATCH`  | `/api/loans/:id/settle`       | Mark as paid off                     |
+| `DELETE` | `/api/loans/:id`              | Delete (guarantor cascades)          |
 
 Section 6 of the loan form is never writable from the public form - only
 `/decision` and `/release` set those columns.
@@ -101,7 +101,7 @@ Section 6 of the loan form is never writable from the public form - only
 Success:
 
 ```json
-{ "success": true, "message": "...", "data": { } }
+{ "success": true, "message": "...", "data": {} }
 ```
 
 Failure, with per-field messages the forms render under each input:
@@ -136,16 +136,16 @@ it. Eight wrong passwords locks the account for fifteen minutes. Sign-in
 answers with one message for every failure, so the form cannot be used to
 discover which HRIS numbers exist.
 
-| Method | Path | Purpose |
-| ------ | ---- | ------- |
-| `POST` | `/api/auth/login` | `{ hris, password }` |
-| `POST` | `/api/auth/logout` | Clears the cookie |
-| `GET` | `/api/auth/me` | Staff record of whoever is signed in |
-| `GET` | `/api/auth/me/history` | Their membership and loans |
-| `POST` | `/api/auth/change-password` | `{ current_password, new_password }` |
-| `GET` | `/api/employees` | Eligible list - `?search=&company=&page=` |
-| `GET` | `/api/employees/companies` | Filter options |
-| `GET` | `/api/employees/prefill` | Own details, for the forms |
+| Method | Path                        | Purpose                                   |
+| ------ | --------------------------- | ----------------------------------------- |
+| `POST` | `/api/auth/login`           | `{ hris, password }`                      |
+| `POST` | `/api/auth/logout`          | Clears the cookie                         |
+| `GET`  | `/api/auth/me`              | Staff record of whoever is signed in      |
+| `GET`  | `/api/auth/me/history`      | Their membership and loans                |
+| `POST` | `/api/auth/change-password` | `{ current_password, new_password }`      |
+| `GET`  | `/api/employees`            | Eligible list - `?search=&company=&page=` |
+| `GET`  | `/api/employees/companies`  | Filter options                            |
+| `GET`  | `/api/employees/prefill`    | Own details, for the forms                |
 
 `/api/employees` never returns a date of birth, NIC or address. That is
 deliberate: the first password is built from the HRIS number and the date of

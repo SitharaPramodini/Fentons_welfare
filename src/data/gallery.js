@@ -5,13 +5,28 @@
  *
  * HOW TO ADD MORE
  * ---------------
- * 1. Put the image file in  src/assets/events/  with a descriptive name.
+ * 1. Put the image file in  src/assets/events/  with a descriptive name -
+ *    or, for a single occasion with a set of its own, a folder beside it
+ *    (as  src/assets/diwali/  holds the Deepawali photographs).
  * 2. Import it at the top of this file.
  * 3. Add an entry below with that import as `src`.
+ *
+ * The array order is the order the tiles appear in, so the most recent
+ * occasion leads; the `id` values are only keys and need not be in order.
  *
  * If `src` is left null, the tile falls back to an on-brand gradient
  * placeholder with its title and icon, so the grid never looks broken.
  * =========================================================================== */
+
+/* --- Deepawali ----------------------------------------------------------- */
+import diwaliGroupPhoto from "@/assets/diwali/diwali-group-photo.jpg";
+import diwaliShrine from "@/assets/diwali/diwali-shrine.jpg";
+import diwaliWelcomeTray from "@/assets/diwali/diwali-welcome-tray.jpg";
+import diwaliNadaswaram from "@/assets/diwali/diwali-nadaswaram.jpg";
+import diwaliOilLamps from "@/assets/diwali/diwali-oil-lamps.jpg";
+import diwaliBlessing from "@/assets/diwali/diwali-blessing.jpg";
+import diwaliShawls from "@/assets/diwali/diwali-shawls.jpg";
+import diwaliPottu from "@/assets/diwali/diwali-pottu.jpg";
 
 /* --- Ramadan Iftar ------------------------------------------------------- */
 import iftarGroupPhoto from "@/assets/events/iftar-group-photo.jpg";
@@ -45,7 +60,109 @@ import sportsDayMensTeam from "@/assets/events/sports-day-mens-team.jpg";
 
 export const galleryCategories = ["All", "Sports", "Celebrations", "Community"];
 
+/* ---------------------------------------------------------------------------
+ * The most recent occasion, shown above the grid.
+ *
+ * Past tense on purpose: this page records what has taken place, and the
+ * Constitution sets no events calendar. When the next activity is held,
+ * replace this block - or set it to null and the strip disappears.
+ * ------------------------------------------------------------------------ */
+
+export const latestActivity = {
+  eyebrow: "Most recent",
+  title: "Deepawali 2026",
+  lead: "An evening of festivity, laughter and togetherness, celebrating the joy and traditions of Deepawali. Colleagues came in festive traditional dress - sarees and kurtas, and veshti for the men - and the mehendi corner drew a queue all afternoon.",
+  image: diwaliGroupPhoto,
+  facts: [
+    { icon: "CalendarCheck", label: "Held on", value: "16 November 2026" },
+    { icon: "Clock", label: "Time", value: "3.30 - 4.30 p.m." },
+    { icon: "MapPin", label: "Where", value: "Main Lobby" },
+  ],
+};
+
 export const gallery = [
+  /* Deepawali, 16 November 2026 - the most recent occasion, so it leads. */
+  {
+    id: "d1",
+    src: diwaliGroupPhoto,
+    title: "Deepawali at head office - everyone together",
+    category: "Celebrations",
+    year: "2026",
+    icon: "Users",
+    tone: "amber",
+    span: "wide",
+  },
+  {
+    id: "d2",
+    src: diwaliShrine,
+    title: "The shrine, garlanded for Deepawali",
+    category: "Celebrations",
+    year: "2026",
+    icon: "Flower2",
+    tone: "rose",
+    span: "normal",
+  },
+  {
+    id: "d3",
+    src: diwaliWelcomeTray,
+    title: "The traditional welcome at the door",
+    category: "Celebrations",
+    year: "2026",
+    icon: "HeartHandshake",
+    tone: "emerald",
+    span: "normal",
+  },
+  {
+    id: "d4",
+    src: diwaliNadaswaram,
+    title: "Nadaswaram and drums lead the way in",
+    category: "Celebrations",
+    year: "2026",
+    icon: "Music",
+    tone: "violet",
+    span: "wide",
+  },
+  {
+    id: "d5",
+    src: diwaliOilLamps,
+    title: "Oil lamps and the poojah table, ready for the lighting",
+    category: "Celebrations",
+    year: "2026",
+    icon: "Flame",
+    tone: "amber",
+    span: "normal",
+  },
+  {
+    id: "d6",
+    src: diwaliBlessing,
+    title: "A blessing as the guests arrive",
+    category: "Celebrations",
+    year: "2026",
+    icon: "Sparkles",
+    tone: "rose",
+    span: "normal",
+  },
+  {
+    id: "d7",
+    src: diwaliShawls,
+    title: "Shawls for the team at the entrance",
+    category: "Celebrations",
+    year: "2026",
+    icon: "Users",
+    tone: "cyan",
+    span: "normal",
+  },
+  {
+    id: "d8",
+    src: diwaliPottu,
+    title: "Marking the forehead before the ceremony begins",
+    category: "Celebrations",
+    year: "2026",
+    icon: "Heart",
+    tone: "violet",
+    span: "normal",
+  },
+
   {
     id: "g1",
     src: iftarGroupPhoto,

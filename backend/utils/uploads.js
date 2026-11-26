@@ -1,6 +1,7 @@
 /**
- * Supporting documents for a membership application: birth certificates and
- * a marriage certificate.
+ * Supporting documents for a membership application - the checklist at the
+ * foot of form WSF/01/2026: identity cards, birth certificates, a marriage
+ * certificate and one birth certificate per child.
  *
  * These are sensitive personal records, so:
  *
@@ -16,6 +17,7 @@
  */
 import multer from "multer";
 import { ApiError } from "./validate.js";
+import { MAX_CHILDREN } from "./constants.js";
 import { compressDocument, describeTarget } from "./compress.js";
 import { buildKey, deleteObject, putObject, storageProvider } from "./storage.js";
 
@@ -33,12 +35,47 @@ export const MAX_FILE_BYTES = Number(process.env.MAX_UPLOAD_MB || 15) * 1024 * 1
  */
 export const MAX_PDF_BYTES = Number(process.env.MAX_PDF_MB || 5) * 1024 * 1024;
 
-/** The three documents the membership form collects. */
+/**
+ * The documents the membership form collects, in the order its checklist
+ * prints them.
+ *
+ * A child's birth certificate arrives on a numbered field -
+ * `child_birth_certificate_1` and so on, one per row of the children block -
+ * so each certificate stays attached to the child it belongs to. They are
+ * all stored under the single `child_birth_certificate` type, with the row
+ * number in `doc_index`.
+ */
+export const CHILD_BIRTH_CERTIFICATE = "child_birth_certificate";
+
 export const DOCUMENT_TYPES = {
+  id_card: "Your identity card",
   birth_certificate: "Your birth certificate",
+  spouse_id_card: "Your spouse's identity card",
   spouse_birth_certificate: "Your spouse's birth certificate",
   marriage_certificate: "Your marriage certificate",
+  ...Object.fromEntries(
+    Array.from({ length: MAX_CHILDREN }, (_, i) => [
+      childCertificateField(i + 1),
+      `Child ${i + 1}'s birth certificate`,
+    ]),
+  ),
 };
+
+/** The upload field a given child's certificate arrives on. */
+export function childCertificateField(position) {
+  return `${CHILD_BIRTH_CERTIFICATE}_${position}`;
+}
+
+/**
+ * Splits an upload field into the type stored against it and its position.
+ * Everything but a child's certificate sits at index 0.
+ */
+export function describeField(field) {
+  const match = /^child_birth_certificate_(\d+)$/.exec(field);
+  return match
+    ? { docType: CHILD_BIRTH_CERTIFICATE, index: Number(match[1]) }
+    : { docType: field, index: 0 };
+}
 
 /** Accepted types, with the bytes each one must start with. */
 const ACCEPTED = {
@@ -123,8 +160,14 @@ export async function storeDocuments({ memberId, reference, files, area = "membe
     const file = list?.[0];
     if (!file) continue;
 
+    const { docType, index } = describeField(field);
     const prepared = await compressDocument(file);
-    const key = buildKey({ area, docType: field, reference, ext: prepared.ext });
+    const key = buildKey({
+      area,
+      docType,
+      reference: index ? `${reference}-${index}` : reference,
+      ext: prepared.ext,
+    });
 
     await putObject(key, prepared.buffer, prepared.mimetype);
 
@@ -134,7 +177,8 @@ export async function storeDocuments({ memberId, reference, files, area = "membe
 
     written.push({
       member_id: memberId,
-      doc_type: field,
+      doc_type: docType,
+      doc_index: index,
       original_name: String(file.originalname).slice(0, 255),
       stored_name: key.split("/").pop(),
       storage_key: key,

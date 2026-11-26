@@ -12,6 +12,8 @@ import { adminRouter } from "./admin.router.js";
 import { testConnection } from "../dbconnection.js";
 import { asyncHandler, ok } from "../utils/validate.js";
 import { RETENTION, consentsForDisplay } from "../utils/consent.js";
+import { officeBearerContacts } from "../utils/society.js";
+import { requireAuth } from "../middleware/requireAuth.js";
 import {
   COMPANIES,
   EMPLOYMENT_CATEGORIES,
@@ -52,6 +54,15 @@ apiRouter.get("/meta/options", (_req, res) =>
  * record. The client never sends the text back. */
 apiRouter.get("/meta/consents", (_req, res) =>
   ok(res, { consents: consentsForDisplay(), retention: RETENTION }),
+);
+
+/**
+ * How to reach the Society's office bearers. Members only - the addresses
+ * are not compiled into the public bundle, so a visitor who is not signed in
+ * never receives them at all.
+ */
+apiRouter.get("/society/contacts", requireAuth, (_req, res) =>
+  ok(res, { contacts: officeBearerContacts() }),
 );
 
 apiRouter.use("/auth", authRouter);

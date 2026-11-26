@@ -224,12 +224,23 @@ function EmployeeCard({ person }) {
   );
 }
 
+/**
+ * One label-and-value line inside a card.
+ *
+ * `flex-wrap` and `min-w-0` are what keep a long value inside the card: a
+ * division like "COMMERCIAL ENGINEERING-SOLAR POWER GENERATION" is wider
+ * than the card, and without them it ran straight off the edge, taking the
+ * HRIS number with it. It now drops onto its own line and wraps there,
+ * which is how the same row behaves on the profile and records pages.
+ */
 function Line({ label, value }) {
   if (!value) return null;
   return (
-    <div className="flex items-baseline justify-between gap-3">
+    <div className="flex flex-wrap items-baseline justify-between gap-x-3">
       <dt className="shrink-0 text-muted-foreground">{label}</dt>
-      <dd className="m-0 truncate text-right font-medium text-foreground/80">{String(value)}</dd>
+      <dd className="m-0 min-w-0 text-right font-medium wrap-break-word text-foreground/80">
+        {String(value)}
+      </dd>
     </div>
   );
 }

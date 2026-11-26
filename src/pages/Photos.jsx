@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
+import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
 import { FilterTabs } from "@/components/ui/FilterTabs";
 import { Lightbox } from "@/components/ui/Lightbox";
 import { Media } from "@/components/ui/PlaceholderTile";
 import { PageHero } from "@/components/layout/PageHero";
 import { Container, EmptyState, Section } from "@/components/ui/primitives";
-import { gallery, galleryCategories } from "@/data/gallery";
+import { gallery, galleryCategories, latestActivity } from "@/data/gallery";
 import { otherActivities } from "@/data/benefits";
 import heroImage from "@/assets/events/netball-championship.jpg";
 
@@ -15,6 +16,62 @@ const spans = {
   tall: "col-span-1 row-span-2",
   normal: "col-span-1 row-span-1",
 };
+
+/**
+ * The most recent occasion, given room above the grid so a member sees what
+ * has just happened before they start browsing the rest. Driven entirely by
+ * `latestActivity`; if that is null the strip is simply not rendered.
+ */
+function LatestActivity() {
+  if (!latestActivity) return null;
+
+  return (
+    <Reveal>
+      <div className="mb-10 grid overflow-hidden rounded-3xl border border-border bg-card shadow-card lg:grid-cols-2">
+        <div className="relative aspect-16/10 lg:aspect-auto lg:h-full lg:min-h-88">
+          <img
+            src={latestActivity.image}
+            alt={latestActivity.title}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </div>
+
+        <div className="p-6 sm:p-8 lg:p-10">
+          <p className="m-0 flex items-center gap-2 font-display text-[11.5px] font-bold tracking-[0.12em] text-brand-700 uppercase">
+            <Icon name="Sparkles" className="h-4 w-4 shrink-0" />
+            {latestActivity.eyebrow}
+          </p>
+
+          <h2 className="mt-3 font-display text-2xl leading-tight font-semibold text-ink sm:text-3xl">
+            {latestActivity.title}
+          </h2>
+
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+            {latestActivity.lead}
+          </p>
+
+          <div className="mt-6 grid gap-2.5">
+            {latestActivity.facts.map((fact) => (
+              <div
+                key={fact.label}
+                className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3"
+              >
+                <Icon name={fact.icon} className="h-4 w-4 shrink-0 text-brand-600" />
+                <span className="font-display text-[13px] font-semibold text-muted-foreground">
+                  {fact.label}
+                </span>
+                <span className="ml-auto text-right font-display text-[14px] font-semibold text-ink">
+                  {fact.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  );
+}
 
 /**
  * Photographs from the Society's welfare activities - clause 8.3.
@@ -54,6 +111,8 @@ export function Photos() {
 
       <Section>
         <Container>
+          <LatestActivity />
+
           <FilterTabs
             options={options}
             value={category}
@@ -119,7 +178,7 @@ export function Photos() {
         />
       </Section>
 
-      <Section muted>
+      {/* <Section muted>
         <Container>
           <Reveal>
             <p className="mx-auto max-w-3xl text-center text-[15px] leading-relaxed text-muted-foreground">
@@ -127,7 +186,7 @@ export function Photos() {
             </p>
           </Reveal>
         </Container>
-      </Section>
+      </Section> */}
     </>
   );
 }
